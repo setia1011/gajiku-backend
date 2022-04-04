@@ -8,15 +8,7 @@ from alembic import context
 from app.core.config import settings
 from app.core.database import Base
 
-# from app.core.models.ref_id import RefId
-# from app.core.models.ref_group import RefGroup
-# from app.core.models.user import User
-# from app.core.models.activation import Activation
-# from app.core.models.subscription_plan import SubscriptionPlan
-# from app.core.models.subscription import Subscription
-# from app.core.models.client import Client
 from app.core.models import *
-# from app.v0.models import User, Item
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

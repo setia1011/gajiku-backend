@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     PROJECT_NAME: str
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
+    SMTP_USERNAME: str
+    SMTP_PASSWORD: str
+
     JWT_SECRET: str
     JWT_ALGORITHM: str
 

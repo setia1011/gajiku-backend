@@ -1,13 +1,15 @@
 import smtplib, ssl
+import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from app.core.config import settings
 
 
 def send(email, name, code, expired):
     try:
-        sender_email = "wanlunxin@gmail.com"
+        sender_email = settings.SMTP_USERNAME
         receiver_email = email
-        password_email = "confirmeddna0"
+        password_email = settings.SMTP_PASSWORD
 
         message = MIMEMultipart("alternative")
         message["Subject"] = "Kode Aktivasi Pembuatan Akun GajiKu"
