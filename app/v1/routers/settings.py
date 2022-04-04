@@ -114,3 +114,8 @@ async def create_id_type(
         raise
     finally:
         db.close()
+
+
+@router.post("/create-subscription-plan/", status_code=status.HTTP_200_OK)
+async def create_subscription_plan():
+    return {}
