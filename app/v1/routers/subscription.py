@@ -8,3 +8,8 @@ router = APIRouter()
 @router.get("/subscribe/")
 async def subscribe():
     return {"data": "This is user api"}
+
+
+@router.get("/my-subscribe/")
+async def subscribe():
+    return {"data": "This is user api"}
