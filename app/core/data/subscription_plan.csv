@@ -1,0 +1,4 @@
+plan,monthly_price,status,creator
+basic,0,valid,1
+standard,25000,valid,1
+premium,100000,valid,1

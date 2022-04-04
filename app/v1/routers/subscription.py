@@ -5,6 +5,6 @@ from app.core.database import db_session
 router = APIRouter()
 
 
-@router.get("/")
-async def hello():
+@router.get("/subscribe/")
+async def subscribe():
     return {"data": "This is user api"}

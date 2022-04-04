@@ -10,8 +10,3 @@ router = APIRouter()
 @router.get("/")
 async def hello(current_user: User = Depends(get_current_active_user)):
     return {"data": current_user}
-
-
-@router.post("/gaji/")
-async def hello(current_user: User = Depends(get_current_active_user)):
-    return {"data": current_user}

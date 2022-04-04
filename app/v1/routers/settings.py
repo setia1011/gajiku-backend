@@ -55,6 +55,20 @@ async def install(db: Session = Depends(db_session)):
         db.commit()
         db.refresh(user_superuser)
 
+    # Insert subscription plan
+    subscription_plan = settings.CORE_PATH + "/data/subscription_plan.csv"
+    df_subscription_plan = pd.read_csv(subscription_plan, usecols=['plan','monthly_price','status','creator'])
+    for i, val in df_subscription_plan.iterrows():
+        _subscription_plan = service_reference.create_subscription_plan(
+            plan=val['plan'],
+            monthly_price=val['monthly_price'],
+            status=val['status'],
+            creator=val['creator'],
+            db=db)
+        db.add(_subscription_plan)
+        db.commit()
+        db.refresh(_subscription_plan)
+
     return {"data": "Install data settings berhasil"}
 
 

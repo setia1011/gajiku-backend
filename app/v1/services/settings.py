@@ -1,6 +1,6 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from app.core.models import RefUserGroup, RefUserIdType, User
+from app.core.models import RefUserGroup, RefUserIdType, User, SubscriptionPlan
 
 
 def create_user_group(
@@ -39,3 +39,9 @@ def create_superuser(
         db: Session = Depends):
     dt_user = User(name=name, username=username, password=password, email=email, group_id=group_id, status=status)
     return dt_user
+
+
+def create_subscription_plan(
+    plan: str, monthly_price: str, status: str, creator: int, db: Session = Depends):
+    dt_subscription_plan = SubscriptionPlan(plan=plan, monthly_price=monthly_price, status=status, creator=creator)
+    return dt_subscription_plan
