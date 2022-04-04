@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 # Core
 from app.core.utils.auth import create_access_token
 from app.core.database import db_session
-from app.core.schemas import user2
+from app.core.schemas import user as schema_user
 from app.core.utils import auth
 from app.core.utils import email
 from app.core.utils.useful import dayday, acticode, current_datetime
@@ -21,7 +21,7 @@ router = APIRouter()
 
 
 @router.post("/login/", status_code=status.HTTP_200_OK)
-async def login(user: user2.UserLogin, db: Session = Depends(db_session)):
+async def login(user: schema_user.UserLogin, db: Session = Depends(db_session)):
     dt_user = service_user.find_user_by_username(username=user.username, db=db)
     # ensure the user exist in the system
     if not dt_user:
@@ -43,7 +43,7 @@ async def login(user: user2.UserLogin, db: Session = Depends(db_session)):
 
 @router.post("/register/", status_code=status.HTTP_201_CREATED)
 async def register_user(
-        user: user2.UserRegister,
+        user: schema_user.UserRegister,
         db: Session = Depends(db_session)):
     try:
         # Check username duplicate
@@ -101,7 +101,7 @@ async def register_user(
 
 @router.put("/update-profile/", dependencies=[Depends(auth.default)], status_code=status.HTTP_201_CREATED)
 async def update_user(
-        user: user2.UserUpdate,
+        user: schema_user.UserUpdate,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
     try:
@@ -124,7 +124,7 @@ async def update_user(
 
 @router.put("/update-group/", dependencies=[Depends(auth.default)], status_code=status.HTTP_201_CREATED)
 async def update_group(
-        schema: user2.GroupUpdate,
+        schema: schema_user.GroupUpdate,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
     try:
@@ -145,7 +145,7 @@ async def update_group(
 
 @router.patch("/update-password/", status_code=status.HTTP_201_CREATED)
 async def update_password(
-        schema: user2.UpdatePassword,
+        schema: schema_user.UpdatePassword,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
     try:
@@ -188,7 +188,7 @@ async def update_password(
 
 
 @router.post("/activation/", status_code=status.HTTP_200_OK)
-async def user_activation(schema: user2.Activation, db: Session = Depends(db_session)):
+async def user_activation(schema: schema_user.Activation, db: Session = Depends(db_session)):
     dt_activation = service_user.find_acticode(acticode=schema.acticode, db=db)
     if not dt_activation:
         raise HTTPException(
@@ -233,7 +233,7 @@ async def user_activation(schema: user2.Activation, db: Session = Depends(db_ses
     return {"data": response}
 
 
-@router.get("/list/", response_model=list[user2.ReadUserDetail], status_code=status.HTTP_200_OK)
+@router.get("/list/", response_model=list[schema_user.ReadUserDetail], status_code=status.HTTP_200_OK)
 async def list_user(db: Session = Depends(db_session)):
     user_list = service_user.user_list(db=db)
     try:
@@ -249,11 +249,8 @@ async def list_user(db: Session = Depends(db_session)):
         db.close()
 
 
-@router.post("/user-detail/",
-             response_model=user2.ReadUserDetail,
-             dependencies=[Depends(auth.default)],
-             status_code=status.HTTP_200_OK)
-async def user_detail(user: user2.FindUserByUsername, db: Session = Depends(db_session)):
+@router.post("/user-detail/", response_model=schema_user.ReadUserDetail, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
+async def user_detail(user: schema_user.FindUserByUsername, db: Session = Depends(db_session)):
     try:
         dt_user = service_user.find_user_by_username_3(username=user.username, db=db)
         return dt_user
