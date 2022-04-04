@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 34a62ebbc4b1
+Revision ID: b8adfcbd1081
 Revises: 
-Create Date: 2022-04-04 16:51:15.075790
+Create Date: 2022-04-04 22:29:34.369296
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '34a62ebbc4b1'
+revision = 'b8adfcbd1081'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -54,7 +54,7 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_plan_updated_at'), 'tbl_subscription_plan', ['updated_at'], unique=False)
     op.create_table('tbl_subscription',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('subs_plan', sa.Integer(), nullable=False),
+    sa.Column('subs_plan_id', sa.Integer(), nullable=False),
     sa.Column('subs_price', sa.Float(), nullable=False),
     sa.Column('subs_start', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('subs_end', sa.DateTime(timezone=True), nullable=False),
@@ -62,7 +62,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('editor', sa.Integer(), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['subs_plan'], ['tbl_subscription_plan.id'], ),
+    sa.ForeignKeyConstraint(['subs_plan_id'], ['tbl_subscription_plan.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tbl_subscription_created_at'), 'tbl_subscription', ['created_at'], unique=False)
@@ -70,7 +70,7 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_editor'), 'tbl_subscription', ['editor'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_id'), 'tbl_subscription', ['id'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_end'), 'tbl_subscription', ['subs_end'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_plan'), 'tbl_subscription', ['subs_plan'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_plan_id'), 'tbl_subscription', ['subs_plan_id'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_price'), 'tbl_subscription', ['subs_price'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_start'), 'tbl_subscription', ['subs_start'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_updated_at'), 'tbl_subscription', ['updated_at'], unique=False)
@@ -492,7 +492,7 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_subscription_updated_at'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_start'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_price'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_subs_plan'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_subs_plan_id'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_end'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_id'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_editor'), table_name='tbl_subscription')

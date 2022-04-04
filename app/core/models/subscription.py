@@ -8,7 +8,7 @@ class Subscription(Base):
     __tablename__ = "tbl_subscription"
 
     id = Column(Integer, primary_key=True, index=True)
-    subs_plan = Column(Integer, ForeignKey('tbl_subscription_plan.id'), nullable=False, index=True)
+    subs_plan_id = Column(Integer, ForeignKey('tbl_subscription_plan.id'), nullable=False, index=True)
     subs_price = Column(Float, nullable=False, index=True)
     subs_start = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     subs_end = Column(DateTime(timezone=True), nullable=False, index=True)
