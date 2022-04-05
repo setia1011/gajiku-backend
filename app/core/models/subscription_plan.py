@@ -8,9 +8,7 @@ class SubscriptionPlan(Base):
     __tablename__ = "tbl_subscription_plan"
 
     id = Column(Integer, primary_key=True, index=True)
-    # basic, standard, premium
     plan = Column(Enum('basic', 'standard', 'premium'), index=True)
-    # monthly price
     monthly_price = Column(Float, nullable=False, index=True)
     status = Column(Enum('valid', 'expired'))
     creator = Column(Integer, nullable=False, index=True)

@@ -105,13 +105,11 @@ class UserIdType(BaseModel):
 
 class UserClient(BaseModel):
     id: Optional[int]
-    token: Optional[str]
     name: Optional[str]
     address: Optional[str]
-    responsible: Optional[str]
+    responsible_name: Optional[str]
     responsible_id_type: Optional[int]
-    responsible_id_number: Optional[int]
-    subscription_id: Optional[int]
+    responsible_id_number: Optional[str]
     creator: Optional[int]
     created_at: Optional[datetime.datetime]
     editor: Optional[int]
@@ -121,10 +119,25 @@ class UserClient(BaseModel):
         orm_mode = True
 
 
-class ReadUserDetail(User):
+class UserDetailOut(User):
     ref_group: UserGroup
     ref_id_type: Optional[UserIdType]
     ref_client: Optional[UserClient]
 
     class Config:
         orm_mode = True
+
+
+class RegisterClient(BaseModel):
+    name: str
+    address: str
+    responsible_name: str
+    responsible_id_type: int
+    responsible_id_number: str
+    creator: int
+
+    class Config:
+        orm_mode = True
+
+
+

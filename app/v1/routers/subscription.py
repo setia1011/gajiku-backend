@@ -1,8 +1,9 @@
 import datetime
-
+from dateutil.relativedelta import relativedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import db_session
+from app.core.schemas import subcription as sch_subs
 from app.v1.services import subscription as serv_subs
 
 
@@ -23,25 +24,37 @@ async def list_plan(db: Session = Depends(db_session)):
 
 @router.post("/subscribe-plan/")
 async def subscribe_plan(
-        subs_plan_id: int,
-        subs_month: int,
-        subs_price: float,
-        subs_start: datetime.datetime,
-        subs_end: datetime.datetime,
-        creator: int,
+        subs: sch_subs.SubscribePlan,
         db: Session = Depends(db_session)):
-    dt_subscription_plan = serv_subs.subscribe_plan(
-        subs_plan_id=subs_plan_id,
-        subs_month=subs_month,
-        subs_price=subs_price,
-        subs_start=subs_start,
-        subs_end=subs_end,
-        creator=creator,
-        db=db)
-    db.add(dt_subscription_plan)
-    db.commit()
-    db.refresh(dt_subscription_plan)
-    return {"data": dt_subscription_plan}
+    try:
+        subscription_plan = serv_subs.plan(subs_plan_id=subs.subs_plan_id, db=db)
+        if not subscription_plan:
+            raise HTTPException(
+                detail="Data subscription plan tidak valid",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        subs_price = subscription_plan.monthly_price * subs.subs_month
+        ppn = subs_price * 10 / 100
+        total_subs_price = subs_price + ppn
+        subs_end = subs.subs_start + relativedelta(months=subs.subs_month)
+
+        dt_subscription_plan = serv_subs.subscribe_plan(
+            subs_plan_id=subs.subs_plan_id,
+            subs_month=subs.subs_month,
+            subs_start=subs.subs_start,
+            subs_price=total_subs_price,
+            subs_end=subs_end,
+            creator=subs.creator,
+            db=db)
+        db.add(dt_subscription_plan)
+        db.commit()
+        db.refresh(dt_subscription_plan)
+
+        return {"data": dt_subscription_plan}
+    except Exception:
+        raise
+    finally:
+        db.close()
 
 
 @router.put("/upgrade-plan/")

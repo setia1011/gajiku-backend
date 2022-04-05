@@ -18,15 +18,16 @@ def list_plan(db: Session = Depends):
 def subscribe_plan(
         subs_plan_id: int,
         subs_month: int,
-        subs_price: float,
         subs_start: datetime.datetime,
         subs_end: datetime.datetime,
+        subs_price: float,
         creator: int,
         db: Session = Depends):
     dt_subscription_plan = Subscription(
         subs_plan_id=subs_plan_id,
         subs_month=subs_month,
-        subs_price=subs_price,
         subs_start=subs_start,
-        subs_end=subs_end, creator=creator)
+        subs_end=subs_end,
+        subs_price=subs_price,
+        creator=creator)
     return dt_subscription_plan

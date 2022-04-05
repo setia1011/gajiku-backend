@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: eee60b78b62b
+Revision ID: a7c57617531e
 Revises: 
-Create Date: 2022-04-05 09:55:14.098381
+Create Date: 2022-04-05 14:00:59.709127
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'eee60b78b62b'
+revision = 'a7c57617531e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -52,47 +52,19 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_plan_monthly_price'), 'tbl_subscription_plan', ['monthly_price'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_plan_plan'), 'tbl_subscription_plan', ['plan'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_plan_updated_at'), 'tbl_subscription_plan', ['updated_at'], unique=False)
-    op.create_table('tbl_subscription',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('subs_plan_id', sa.Integer(), nullable=False),
-    sa.Column('subs_month', sa.Integer(), nullable=False),
-    sa.Column('subs_price', sa.Float(), nullable=False),
-    sa.Column('subs_start', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('subs_end', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['subs_plan_id'], ['tbl_subscription_plan.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_tbl_subscription_created_at'), 'tbl_subscription', ['created_at'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_creator'), 'tbl_subscription', ['creator'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_editor'), 'tbl_subscription', ['editor'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_id'), 'tbl_subscription', ['id'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_end'), 'tbl_subscription', ['subs_end'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_month'), 'tbl_subscription', ['subs_month'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_plan_id'), 'tbl_subscription', ['subs_plan_id'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_price'), 'tbl_subscription', ['subs_price'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_start'), 'tbl_subscription', ['subs_start'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_updated_at'), 'tbl_subscription', ['updated_at'], unique=False)
     op.create_table('tbl_client',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('token', sa.String(length=255), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('address', sa.TEXT(), nullable=True),
-    sa.Column('responsible', sa.String(length=50), nullable=False),
+    sa.Column('responsible_name', sa.String(length=50), nullable=False),
     sa.Column('responsible_id_type', sa.Integer(), nullable=False),
-    sa.Column('responsible_id_number', sa.Integer(), nullable=False),
-    sa.Column('subscription_id', sa.Integer(), nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('responsible_id_number', sa.String(length=50), nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('editor', sa.Integer(), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['responsible_id_type'], ['ref_user_id_type.id'], ),
-    sa.ForeignKeyConstraint(['subscription_id'], ['tbl_subscription.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('token')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tbl_client_id'), 'tbl_client', ['id'], unique=False)
     op.create_index(op.f('ix_tbl_client_name'), 'tbl_client', ['name'], unique=False)
@@ -258,6 +230,35 @@ def upgrade():
     op.create_index(op.f('ix_set_gaji_status_kawin_keterangan'), 'set_gaji_status_kawin', ['keterangan'], unique=False)
     op.create_index(op.f('ix_set_gaji_status_kawin_kode'), 'set_gaji_status_kawin', ['kode'], unique=False)
     op.create_index(op.f('ix_set_gaji_status_kawin_status'), 'set_gaji_status_kawin', ['status'], unique=False)
+    op.create_table('tbl_subscription',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('subs_plan_id', sa.Integer(), nullable=False),
+    sa.Column('subs_month', sa.Integer(), nullable=False),
+    sa.Column('subs_price', sa.Float(), nullable=False),
+    sa.Column('subs_start', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('subs_end', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('token', sa.String(length=255), nullable=False),
+    sa.Column('client_id', sa.Integer(), nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['client_id'], ['tbl_client.id'], ),
+    sa.ForeignKeyConstraint(['subs_plan_id'], ['tbl_subscription_plan.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('token')
+    )
+    op.create_index(op.f('ix_tbl_subscription_client_id'), 'tbl_subscription', ['client_id'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_created_at'), 'tbl_subscription', ['created_at'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_creator'), 'tbl_subscription', ['creator'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_editor'), 'tbl_subscription', ['editor'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_id'), 'tbl_subscription', ['id'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_end'), 'tbl_subscription', ['subs_end'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_month'), 'tbl_subscription', ['subs_month'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_plan_id'), 'tbl_subscription', ['subs_plan_id'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_price'), 'tbl_subscription', ['subs_price'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_start'), 'tbl_subscription', ['subs_start'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_updated_at'), 'tbl_subscription', ['updated_at'], unique=False)
     op.create_table('tbl_user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=255), nullable=False),
@@ -436,6 +437,18 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_user_email'), table_name='tbl_user')
     op.drop_index(op.f('ix_tbl_user_client_id'), table_name='tbl_user')
     op.drop_table('tbl_user')
+    op.drop_index(op.f('ix_tbl_subscription_updated_at'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_subs_start'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_subs_price'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_subs_plan_id'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_subs_month'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_subs_end'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_id'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_editor'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_creator'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_created_at'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_client_id'), table_name='tbl_subscription')
+    op.drop_table('tbl_subscription')
     op.drop_index(op.f('ix_set_gaji_status_kawin_status'), table_name='set_gaji_status_kawin')
     op.drop_index(op.f('ix_set_gaji_status_kawin_kode'), table_name='set_gaji_status_kawin')
     op.drop_index(op.f('ix_set_gaji_status_kawin_keterangan'), table_name='set_gaji_status_kawin')
@@ -491,17 +504,6 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_client_name'), table_name='tbl_client')
     op.drop_index(op.f('ix_tbl_client_id'), table_name='tbl_client')
     op.drop_table('tbl_client')
-    op.drop_index(op.f('ix_tbl_subscription_updated_at'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_subs_start'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_subs_price'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_subs_plan_id'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_subs_month'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_subs_end'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_id'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_editor'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_creator'), table_name='tbl_subscription')
-    op.drop_index(op.f('ix_tbl_subscription_created_at'), table_name='tbl_subscription')
-    op.drop_table('tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_plan_updated_at'), table_name='tbl_subscription_plan')
     op.drop_index(op.f('ix_tbl_subscription_plan_plan'), table_name='tbl_subscription_plan')
     op.drop_index(op.f('ix_tbl_subscription_plan_monthly_price'), table_name='tbl_subscription_plan')

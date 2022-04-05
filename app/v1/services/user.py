@@ -1,7 +1,7 @@
 import datetime
 from fastapi import Depends
 from sqlalchemy.orm import Session, selectinload
-from app.core.models import RefUserGroup, RefUserIdType, User, Activation
+from app.core.models import User, Activation, Client
 
 
 def create_user(
@@ -14,9 +14,33 @@ def create_user(
     return dt_user
 
 
+def register_client(
+        name: str,
+        address: str,
+        responsible_name: str,
+        responsible_id_type: int,
+        responsible_id_number: str,
+        creator: int,
+        db: Session = Depends):
+    dt_client = Client(
+        name=name,
+        address=address,
+        responsible_name=responsible_name,
+        responsible_id_type=responsible_id_type,
+        responsible_id_number=responsible_id_number,
+        creator=creator)
+    return dt_client
+
+
 def user_login(username: str, password: str, db: Session = Depends):
     dt_user = db.query(User).filter(User.username == username, User.password == password).first()
     return dt_user
+
+
+def find_client_exists(name: str, db: Session = Depends):
+    dt_client = db.query(Client).filter(Client.name == name).first()
+    return dt_client
+
 
 
 def find_user_by_username(username: str, db: Session = Depends):
@@ -25,40 +49,9 @@ def find_user_by_username(username: str, db: Session = Depends):
 
 
 def find_user_by_username_3(username: str, db: Session = Depends):
-    dt_user = db.query(User).filter(User.username == username)\
+    dt_user = db.query(User).filter(User.username == username) \
         .options(selectinload(User.ref_group), selectinload(User.ref_id_type), selectinload(User.ref_client)).first()
     return dt_user
-
-
-def find_user_by_username_2(username: str, db: Session = Depends):
-    dt_user = db.query(User, RefUserGroup, RefUserIdType) \
-        .join(RefUserGroup, RefUserGroup.id == User.group_id, isouter=True) \
-        .join(RefUserIdType, RefUserIdType.id == User.id_type, isouter=True).filter(User.username == username).all()
-
-    li = []
-    ct = 0
-    for i, j, k in dt_user:
-        # First list
-        li.append({"id": i.id})
-        # Append to the first list
-        li[ct]["name"] = i.name
-        li[ct]["username"] = i.username
-        # li[ct]["password"] = i.password
-        li[ct]["id_type_id"] = i.id_type
-        li[ct]["id_number"] = i.id_number
-        if k:
-            li[ct]["id_type"] = k.id_type
-        else:
-            li[ct]["id_type"] = None
-        li[ct]["email"] = i.email
-        li[ct]["phone"] = i.phone
-        li[ct]["group_id"] = i.group_id
-        li[ct]["group_name"] = j.group_name
-        li[ct]["client_id"] = i.client_id
-        li[ct]["address"] = i.address
-        li[ct]["status"] = i.status
-        ct += 1
-    return li
 
 
 def find_user_by_id(id: int, db: Session = Depends):
