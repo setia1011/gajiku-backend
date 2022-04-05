@@ -1,7 +1,7 @@
 # gajiku-backend
 Rest API (backend) Gajiku
 
-![img.png](img.png)
+![screenshot.png](screenshot.png)
 
 # Alembic database migration
 alembic upgrade head
