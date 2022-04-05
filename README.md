@@ -7,5 +7,6 @@ Rest API (backend) Gajiku
 alembic upgrade head
 
 # Run API
-fastapi run
+fastapi run<br>
+http://127.0.0.1:8000/
 
