@@ -3,6 +3,9 @@ Rest API (backend) Gajiku
 
 ![screenshot.png](screenshot.png)
 
+# Install all libraries
+pip install -r requirements.txt
+
 # Alembic database migration
 alembic upgrade head
 
