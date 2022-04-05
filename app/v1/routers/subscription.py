@@ -1,13 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import db_session
+from app.v1.services import subscription as serv_subs
+
 
 router = APIRouter()
 
 
 @router.get("/list-plan/")
-async def list_plan():
-    return {"data": "List subscription plan"}
+async def list_plan(db: Session = Depends(db_session)):
+    dt_subscription_plan = serv_subs.list_plan(db=db)
+    return {"data": dt_subscription_plan}
 
 
 @router.get("/detail-plan/{subs_plan_id}")
