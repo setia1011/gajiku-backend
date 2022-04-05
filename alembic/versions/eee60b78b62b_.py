@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: b8adfcbd1081
+Revision ID: eee60b78b62b
 Revises: 
-Create Date: 2022-04-04 22:29:34.369296
+Create Date: 2022-04-05 09:55:14.098381
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b8adfcbd1081'
+revision = 'eee60b78b62b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -55,6 +55,7 @@ def upgrade():
     op.create_table('tbl_subscription',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('subs_plan_id', sa.Integer(), nullable=False),
+    sa.Column('subs_month', sa.Integer(), nullable=False),
     sa.Column('subs_price', sa.Float(), nullable=False),
     sa.Column('subs_start', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('subs_end', sa.DateTime(timezone=True), nullable=False),
@@ -70,6 +71,7 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_editor'), 'tbl_subscription', ['editor'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_id'), 'tbl_subscription', ['id'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_end'), 'tbl_subscription', ['subs_end'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_month'), 'tbl_subscription', ['subs_month'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_plan_id'), 'tbl_subscription', ['subs_plan_id'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_price'), 'tbl_subscription', ['subs_price'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_start'), 'tbl_subscription', ['subs_start'], unique=False)
@@ -493,6 +495,7 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_subscription_subs_start'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_price'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_plan_id'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_subs_month'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_end'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_id'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_editor'), table_name='tbl_subscription')

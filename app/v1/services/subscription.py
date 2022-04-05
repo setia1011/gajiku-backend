@@ -2,8 +2,31 @@ import datetime
 from fastapi import Depends
 from sqlalchemy.orm import Session, selectinload
 from app.core.models.subscription_plan import SubscriptionPlan
+from app.core.models.subscription import Subscription
+
+
+def plan(subs_plan_id: int, db: Session = Depends):
+    dt_subscription_plan = db.query(SubscriptionPlan).filter(SubscriptionPlan.id == subs_plan_id).first()
+    return dt_subscription_plan
 
 
 def list_plan(db: Session = Depends):
     dt_subscription_plan = db.query(SubscriptionPlan).all()
+    return dt_subscription_plan
+
+
+def subscribe_plan(
+        subs_plan_id: int,
+        subs_month: int,
+        subs_price: float,
+        subs_start: datetime.datetime,
+        subs_end: datetime.datetime,
+        creator: int,
+        db: Session = Depends):
+    dt_subscription_plan = Subscription(
+        subs_plan_id=subs_plan_id,
+        subs_month=subs_month,
+        subs_price=subs_price,
+        subs_start=subs_start,
+        subs_end=subs_end, creator=creator)
     return dt_subscription_plan
