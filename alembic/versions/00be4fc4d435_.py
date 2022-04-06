@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 74c1669243f8
+Revision ID: 00be4fc4d435
 Revises: 
-Create Date: 2022-04-06 10:35:07.416431
+Create Date: 2022-04-06 15:29:46.147897
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '74c1669243f8'
+revision = '00be4fc4d435'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -95,7 +95,7 @@ def upgrade():
     op.create_index(op.f('ix_tbl_activation_user_id'), 'tbl_activation', ['user_id'], unique=False)
     op.create_table('tbl_client',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=255), nullable=False),
+    sa.Column('project', sa.String(length=255), nullable=False),
     sa.Column('address', sa.TEXT(), nullable=True),
     sa.Column('responsible_name', sa.String(length=50), nullable=False),
     sa.Column('responsible_id_type', sa.Integer(), nullable=False),
@@ -110,7 +110,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tbl_client_id'), 'tbl_client', ['id'], unique=False)
-    op.create_index(op.f('ix_tbl_client_name'), 'tbl_client', ['name'], unique=False)
+    op.create_index(op.f('ix_tbl_client_project'), 'tbl_client', ['project'], unique=False)
     op.create_index(op.f('ix_tbl_client_responsible_id_number'), 'tbl_client', ['responsible_id_number'], unique=False)
     op.create_index(op.f('ix_tbl_client_responsible_id_type'), 'tbl_client', ['responsible_id_type'], unique=False)
     op.create_index(op.f('ix_tbl_client_user_id'), 'tbl_client', ['user_id'], unique=False)
@@ -489,7 +489,7 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_client_user_id'), table_name='tbl_client')
     op.drop_index(op.f('ix_tbl_client_responsible_id_type'), table_name='tbl_client')
     op.drop_index(op.f('ix_tbl_client_responsible_id_number'), table_name='tbl_client')
-    op.drop_index(op.f('ix_tbl_client_name'), table_name='tbl_client')
+    op.drop_index(op.f('ix_tbl_client_project'), table_name='tbl_client')
     op.drop_index(op.f('ix_tbl_client_id'), table_name='tbl_client')
     op.drop_table('tbl_client')
     op.drop_index(op.f('ix_tbl_activation_user_id'), table_name='tbl_activation')

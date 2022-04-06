@@ -6,7 +6,7 @@ from typing import Optional
 
 class Client(BaseModel):
     id: Optional[int]
-    name: Optional[str]
+    project: Optional[str]
     address: Optional[str]
     responsible_name: Optional[str]
     responsible_id_type: Optional[int]

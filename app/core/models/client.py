@@ -8,7 +8,7 @@ class Client(Base):
     __tablename__ = "tbl_client"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False, index=True)
+    project = Column(String(255), nullable=False, index=True)
     address = Column(TEXT)
     responsible_name = Column(String(50), nullable=False)
     responsible_id_type = Column(Integer, ForeignKey('ref_user_id_type.id'), nullable=False, index=True)

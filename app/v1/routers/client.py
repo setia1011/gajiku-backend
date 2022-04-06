@@ -19,21 +19,21 @@ async def register_project(
         db: Session = Depends(db_session)):
     try:
         # Check if client already exists
-        dt_client = service_user.find_client_exists(name=client.name, db=db)
+        dt_client = service_user.find_client_exists(project=client.project, db=db)
         if dt_client:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Client dengan nama {client.name} sudah ada di dalam sistem"
+                detail=f"Client dengan nama {client.project} sudah ada di dalam sistem"
             )
 
         dt_client = service_user.register_client(
-            name=client.name,
+            project=client.project,
             address=client.address,
             responsible_name=client.responsible_name,
             responsible_id_type=client.responsible_id_type,
             responsible_id_number=client.responsible_id_number,
             user_id=current_user.id,
-            creator=client.creator,
+            creator=current_user.id,
             db=db)
         db.add(dt_client)
         db.commit()

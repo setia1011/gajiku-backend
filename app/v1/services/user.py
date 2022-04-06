@@ -15,7 +15,7 @@ def create_user(
 
 
 def register_client(
-        name: str,
+        project: str,
         address: str,
         responsible_name: str,
         responsible_id_type: int,
@@ -24,7 +24,7 @@ def register_client(
         creator: int,
         db: Session = Depends):
     dt_client = Client(
-        name=name,
+        project=project,
         address=address,
         responsible_name=responsible_name,
         responsible_id_type=responsible_id_type,
@@ -39,8 +39,8 @@ def user_login(username: str, password: str, db: Session = Depends):
     return dt_user
 
 
-def find_client_exists(name: str, db: Session = Depends):
-    dt_client = db.query(Client).filter(Client.name == name).first()
+def find_client_exists(project: str, db: Session = Depends):
+    dt_client = db.query(Client).filter(Client.project == project).first()
     return dt_client
 
 

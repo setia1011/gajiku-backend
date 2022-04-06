@@ -114,7 +114,7 @@ class UserIdType(BaseModel):
 
 class UserClient(BaseModel):
     id: Optional[int]
-    name: Optional[str]
+    project: Optional[str]
     address: Optional[str]
     responsible_name: Optional[str]
     responsible_id_type: Optional[int]
@@ -139,12 +139,11 @@ class UserDetailOut(User):
 
 
 class RegisterClient(BaseModel):
-    name: str
+    project: str
     address: str
     responsible_name: str
     responsible_id_type: int
     responsible_id_number: str
-    creator: int
 
     class Config:
         orm_mode = True
