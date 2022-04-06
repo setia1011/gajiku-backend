@@ -98,8 +98,8 @@ async def register(
         db.close()
 
 
-@router.put("/update-profile/", dependencies=[Depends(auth.default)], status_code=status.HTTP_201_CREATED)
-async def update_profile(
+@router.put("/update/", dependencies=[Depends(auth.default)], status_code=status.HTTP_201_CREATED)
+async def update(
         user: schema_user.UserUpdate,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
@@ -121,8 +121,8 @@ async def update_profile(
         db.close()
 
 
-@router.patch("/update-password/", status_code=status.HTTP_201_CREATED)
-async def update_password(
+@router.patch("/password/", status_code=status.HTTP_201_CREATED)
+async def password(
         schema: schema_user.UpdatePassword,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
@@ -211,10 +211,10 @@ async def activation(schema: schema_user.Activation, db: Session = Depends(db_se
     return {"data": response}
 
 
-@router.post("/user-detail/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
-async def user_detail(user: schema_user.FindUserByUsername, db: Session = Depends(db_session)):
+@router.get("/detail/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
+async def detail(current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
     try:
-        dt_user = service_user.find_user_by_username_3(username=user.username, db=db)
+        dt_user = service_user.find_user_by_username_3(username=current_user.username, db=db)
         return dt_user
     except Exception:
         raise

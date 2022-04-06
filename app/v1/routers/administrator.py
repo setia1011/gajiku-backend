@@ -29,6 +29,17 @@ async def list_user(db: Session = Depends(db_session)):
         db.close()
 
 
+@router.post("/user-detail/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
+async def user_detail(user: schema_user.FindUserByUsername, db: Session = Depends(db_session)):
+    try:
+        dt_user = service_user.find_user_by_username_3(username=user.username, db=db)
+        return dt_user
+    except Exception:
+        raise
+    finally:
+        db.close()
+
+
 @router.put("/update-group/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
 async def update_group(schema: schema_user.GroupUpdate, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
     try:
