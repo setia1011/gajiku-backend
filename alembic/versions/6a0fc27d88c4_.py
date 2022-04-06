@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 00be4fc4d435
+Revision ID: 6a0fc27d88c4
 Revises: 
-Create Date: 2022-04-06 15:29:46.147897
+Create Date: 2022-04-06 23:22:18.592588
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '00be4fc4d435'
+revision = '6a0fc27d88c4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -283,6 +283,7 @@ def upgrade():
     sa.Column('subs_end', sa.DateTime(timezone=True), nullable=False),
     sa.Column('token', sa.String(length=255), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('pending', 'active', 'expired'), server_default='pending', nullable=False),
     sa.Column('creator', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('editor', sa.Integer(), nullable=True),
@@ -297,6 +298,7 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_creator'), 'tbl_subscription', ['creator'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_editor'), 'tbl_subscription', ['editor'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_id'), 'tbl_subscription', ['id'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_status'), 'tbl_subscription', ['status'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_end'), 'tbl_subscription', ['subs_end'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_month'), 'tbl_subscription', ['subs_month'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_plan_id'), 'tbl_subscription', ['subs_plan_id'], unique=False)
@@ -430,6 +432,7 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_subscription_subs_plan_id'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_month'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_end'), table_name='tbl_subscription')
+    op.drop_index(op.f('ix_tbl_subscription_status'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_id'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_editor'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_creator'), table_name='tbl_subscription')

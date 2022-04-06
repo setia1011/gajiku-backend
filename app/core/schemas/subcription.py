@@ -23,7 +23,7 @@ class SubscribePlan(BaseModel):
     subs_plan_id: int
     subs_month: int
     subs_start: datetime.datetime
-    creator: int
+    project_id: int
 
     class Config:
         orm_mode = True
@@ -32,7 +32,7 @@ class SubscribePlan(BaseModel):
                 "subs_plan_id": 2,
                 "subs_month": 3,
                 "subs_start": "2019-08-24T14:15:22Z",
-                "creator": 1
+                "project_id": 1
             }
         }
 

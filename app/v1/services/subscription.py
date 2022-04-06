@@ -21,6 +21,8 @@ def subscribe_plan(
         subs_start: datetime.datetime,
         subs_end: datetime.datetime,
         subs_price: float,
+        token: str,
+        client_id: int,
         creator: int,
         db: Session = Depends):
     dt_subscription_plan = Subscription(
@@ -29,5 +31,7 @@ def subscribe_plan(
         subs_start=subs_start,
         subs_end=subs_end,
         subs_price=subs_price,
+        token=token,
+        client_id=client_id,
         creator=creator)
     return dt_subscription_plan

@@ -2,11 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import db_session
 from app.core.models.user import User
-from app.core.utils import auth
+from app.core.utils import auth, useful
 from app.core.schemas import user as schema_user
 from app.core.schemas import client as schema_client
 from app.v1.services import user as service_user
 from app.v1.services import client as service_client
+from app.core.schemas import subcription as sch_subs
+from app.v1.services import subscription as serv_subs
+from dateutil.relativedelta import relativedelta
 
 
 router = APIRouter()
@@ -72,5 +75,47 @@ async def project_detail(
 
 
 @router.post("/subscribe-plan/")
-async def subscribe_plan():
-    return {}
+async def subscribe_plan(
+        subs: sch_subs.SubscribePlan,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
+    try:
+        subscription_plan = serv_subs.plan(subs_plan_id=subs.subs_plan_id, db=db)
+        if not subscription_plan:
+            raise HTTPException(
+                detail="Data subscription plan tidak valid",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        client = service_client.project_detail(user_id=current_user.id, client_id=subs.project_id, db=db)
+        if not client:
+            raise HTTPException(
+                detail="Data client tidak valid",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        subs_price = subscription_plan.monthly_price * subs.subs_month
+        ppn = subs_price * 10 / 100
+        total_subs_price = subs_price + ppn
+        subs_end = subs.subs_start + relativedelta(months=subs.subs_month)
+        token = useful.random_string(16)
+
+        dt_subscription_plan = serv_subs.subscribe_plan(
+            subs_plan_id=subs.subs_plan_id,
+            subs_month=subs.subs_month,
+            subs_start=subs.subs_start,
+            subs_price=total_subs_price,
+            subs_end=subs_end,
+            token=token,
+            client_id=client.id,
+            creator=current_user.id,
+            db=db)
+        db.add(dt_subscription_plan)
+        db.commit()
+        db.refresh(dt_subscription_plan)
+
+        return {"data": dt_subscription_plan}
+    except Exception:
+        raise
+    finally:
+        db.close()
