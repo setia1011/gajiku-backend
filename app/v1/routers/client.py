@@ -5,12 +5,14 @@ from app.core.models.user import User
 from app.core.utils import auth
 from app.core.schemas import user as schema_user
 from app.v1.services import user as service_user
+from app.v1.services import client as service_client
+
 
 router = APIRouter()
 
 
-@router.post("/register-client/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
-async def register_client(
+@router.post("/register-project/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
+async def register_project(
         client: schema_user.RegisterClient,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
@@ -51,3 +53,19 @@ async def register_client(
         raise
     finally:
         db.close()
+
+
+@router.get("/list-project/")
+async def list_project(current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
+    dt_project = service_client.list_project(user_id=current_user.id, db=db)
+    return dt_project
+
+
+@router.post("/project-detail/")
+async def project_detail():
+    return {}
+
+
+@router.post("/subscribe-plan/")
+async def subscribe_plan():
+    return {}
