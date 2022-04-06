@@ -3,6 +3,10 @@ from pydantic import BaseModel
 from typing import Optional
 
 
+class ResponseData(BaseModel):
+    data: str
+
+
 class User(BaseModel):
     email: Optional[str]
     address: Optional[str]
@@ -31,6 +35,11 @@ class UserLogin(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserLoginOut(BaseModel):
+    access_token: str
+    token_type: str
 
 
 class UserRegister(BaseModel):
