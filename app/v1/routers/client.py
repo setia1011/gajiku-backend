@@ -4,6 +4,7 @@ from app.core.database import db_session
 from app.core.models.user import User
 from app.core.utils import auth
 from app.core.schemas import user as schema_user
+from app.core.schemas import client as schema_client
 from app.v1.services import user as service_user
 from app.v1.services import client as service_client
 
@@ -55,7 +56,7 @@ async def register_project(
         db.close()
 
 
-@router.get("/list-project/")
+@router.get("/list-project/", response_model=list[schema_client.Client])
 async def list_project(current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
     dt_project = service_client.list_project(user_id=current_user.id, db=db)
     return dt_project
