@@ -20,6 +20,7 @@ def register_client(
         responsible_name: str,
         responsible_id_type: int,
         responsible_id_number: str,
+        user_id: int,
         creator: int,
         db: Session = Depends):
     dt_client = Client(
@@ -28,6 +29,7 @@ def register_client(
         responsible_name=responsible_name,
         responsible_id_type=responsible_id_type,
         responsible_id_number=responsible_id_number,
+        user_id=user_id,
         creator=creator)
     return dt_client
 

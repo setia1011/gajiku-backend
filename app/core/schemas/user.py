@@ -14,7 +14,7 @@ class User(BaseModel):
     status: Optional[str]
     group_id: Optional[int]
     creator: Optional[int]
-    client_id: Optional[int]
+    # client_id: Optional[int]
     created_at: Optional[datetime.datetime]
     id_type: Optional[int]
     editor: Optional[int]
@@ -119,6 +119,7 @@ class UserClient(BaseModel):
     responsible_name: Optional[str]
     responsible_id_type: Optional[int]
     responsible_id_number: Optional[str]
+    user_id: Optional[int]
     creator: Optional[int]
     created_at: Optional[datetime.datetime]
     editor: Optional[int]
@@ -131,7 +132,7 @@ class UserClient(BaseModel):
 class UserDetailOut(User):
     ref_group: UserGroup
     ref_id_type: Optional[UserIdType]
-    ref_client: Optional[UserClient]
+    ref_client: Optional[list[UserClient]]
 
     class Config:
         orm_mode = True

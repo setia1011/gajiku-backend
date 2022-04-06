@@ -13,7 +13,7 @@ class User(Base):
     email = Column(String(255), unique=True, nullable=False, index=True)
     name = Column(String(50), nullable=False, index=True)
     group_id = Column(Integer, ForeignKey('ref_user_group.id'), server_default="4", index=True)
-    client_id = Column(Integer, ForeignKey('tbl_client.id'), index=True)
+    # client_id = Column(Integer, ForeignKey('tbl_client.id'), index=True)
 
     id_type = Column(Integer, ForeignKey('ref_user_id_type.id'), index=True)
     id_number = Column(String(50), index=True)

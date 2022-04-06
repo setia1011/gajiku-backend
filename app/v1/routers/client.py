@@ -29,6 +29,7 @@ async def register_client(
             responsible_name=client.responsible_name,
             responsible_id_type=client.responsible_id_type,
             responsible_id_number=client.responsible_id_number,
+            user_id=current_user.id,
             creator=client.creator,
             db=db)
         db.add(dt_client)

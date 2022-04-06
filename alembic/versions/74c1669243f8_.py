@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: a7c57617531e
+Revision ID: 74c1669243f8
 Revises: 
-Create Date: 2022-04-05 14:00:59.709127
+Create Date: 2022-04-06 10:35:07.416431
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a7c57617531e'
+revision = '74c1669243f8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -52,6 +52,47 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_plan_monthly_price'), 'tbl_subscription_plan', ['monthly_price'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_plan_plan'), 'tbl_subscription_plan', ['plan'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_plan_updated_at'), 'tbl_subscription_plan', ['updated_at'], unique=False)
+    op.create_table('tbl_user',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(length=255), nullable=False),
+    sa.Column('password', sa.String(length=255), nullable=False),
+    sa.Column('email', sa.String(length=255), nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
+    sa.Column('group_id', sa.Integer(), server_default='4', nullable=True),
+    sa.Column('id_type', sa.Integer(), nullable=True),
+    sa.Column('id_number', sa.String(length=50), nullable=True),
+    sa.Column('phone', sa.String(length=15), nullable=True),
+    sa.Column('address', sa.TEXT(), nullable=True),
+    sa.Column('status', sa.Enum('enabled', 'disabled'), server_default='disabled', nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['group_id'], ['ref_user_group.id'], ),
+    sa.ForeignKeyConstraint(['id_type'], ['ref_user_id_type.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_tbl_user_email'), 'tbl_user', ['email'], unique=True)
+    op.create_index(op.f('ix_tbl_user_group_id'), 'tbl_user', ['group_id'], unique=False)
+    op.create_index(op.f('ix_tbl_user_id'), 'tbl_user', ['id'], unique=False)
+    op.create_index(op.f('ix_tbl_user_id_number'), 'tbl_user', ['id_number'], unique=False)
+    op.create_index(op.f('ix_tbl_user_id_type'), 'tbl_user', ['id_type'], unique=False)
+    op.create_index(op.f('ix_tbl_user_name'), 'tbl_user', ['name'], unique=False)
+    op.create_index(op.f('ix_tbl_user_status'), 'tbl_user', ['status'], unique=False)
+    op.create_index(op.f('ix_tbl_user_username'), 'tbl_user', ['username'], unique=True)
+    op.create_table('tbl_activation',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('acticode', sa.String(length=255), nullable=False),
+    sa.Column('expired', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('activated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('status', sa.Enum('activated', 'inactivated'), server_default='inactivated', nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['tbl_user.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('acticode')
+    )
+    op.create_index(op.f('ix_tbl_activation_id'), 'tbl_activation', ['id'], unique=False)
+    op.create_index(op.f('ix_tbl_activation_user_id'), 'tbl_activation', ['user_id'], unique=False)
     op.create_table('tbl_client',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
@@ -59,17 +100,20 @@ def upgrade():
     sa.Column('responsible_name', sa.String(length=50), nullable=False),
     sa.Column('responsible_id_type', sa.Integer(), nullable=False),
     sa.Column('responsible_id_number', sa.String(length=50), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('creator', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('editor', sa.Integer(), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['responsible_id_type'], ['ref_user_id_type.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['tbl_user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tbl_client_id'), 'tbl_client', ['id'], unique=False)
     op.create_index(op.f('ix_tbl_client_name'), 'tbl_client', ['name'], unique=False)
     op.create_index(op.f('ix_tbl_client_responsible_id_number'), 'tbl_client', ['responsible_id_number'], unique=False)
     op.create_index(op.f('ix_tbl_client_responsible_id_type'), 'tbl_client', ['responsible_id_type'], unique=False)
+    op.create_index(op.f('ix_tbl_client_user_id'), 'tbl_client', ['user_id'], unique=False)
     op.create_table('set_gaji_bpjs',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('kode', sa.String(length=50), nullable=False),
@@ -259,50 +303,6 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_subs_price'), 'tbl_subscription', ['subs_price'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_subs_start'), 'tbl_subscription', ['subs_start'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_updated_at'), 'tbl_subscription', ['updated_at'], unique=False)
-    op.create_table('tbl_user',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('username', sa.String(length=255), nullable=False),
-    sa.Column('password', sa.String(length=255), nullable=False),
-    sa.Column('email', sa.String(length=255), nullable=False),
-    sa.Column('name', sa.String(length=50), nullable=False),
-    sa.Column('group_id', sa.Integer(), server_default='4', nullable=True),
-    sa.Column('client_id', sa.Integer(), nullable=True),
-    sa.Column('id_type', sa.Integer(), nullable=True),
-    sa.Column('id_number', sa.String(length=50), nullable=True),
-    sa.Column('phone', sa.String(length=15), nullable=True),
-    sa.Column('address', sa.TEXT(), nullable=True),
-    sa.Column('status', sa.Enum('enabled', 'disabled'), server_default='disabled', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['client_id'], ['tbl_client.id'], ),
-    sa.ForeignKeyConstraint(['group_id'], ['ref_user_group.id'], ),
-    sa.ForeignKeyConstraint(['id_type'], ['ref_user_id_type.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_tbl_user_client_id'), 'tbl_user', ['client_id'], unique=False)
-    op.create_index(op.f('ix_tbl_user_email'), 'tbl_user', ['email'], unique=True)
-    op.create_index(op.f('ix_tbl_user_group_id'), 'tbl_user', ['group_id'], unique=False)
-    op.create_index(op.f('ix_tbl_user_id'), 'tbl_user', ['id'], unique=False)
-    op.create_index(op.f('ix_tbl_user_id_number'), 'tbl_user', ['id_number'], unique=False)
-    op.create_index(op.f('ix_tbl_user_id_type'), 'tbl_user', ['id_type'], unique=False)
-    op.create_index(op.f('ix_tbl_user_name'), 'tbl_user', ['name'], unique=False)
-    op.create_index(op.f('ix_tbl_user_status'), 'tbl_user', ['status'], unique=False)
-    op.create_index(op.f('ix_tbl_user_username'), 'tbl_user', ['username'], unique=True)
-    op.create_table('tbl_activation',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('acticode', sa.String(length=255), nullable=False),
-    sa.Column('expired', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('activated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('status', sa.Enum('activated', 'inactivated'), server_default='inactivated', nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['tbl_user.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('acticode')
-    )
-    op.create_index(op.f('ix_tbl_activation_id'), 'tbl_activation', ['id'], unique=False)
-    op.create_index(op.f('ix_tbl_activation_user_id'), 'tbl_activation', ['user_id'], unique=False)
     op.create_table('tbl_gaji_employee',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=200), nullable=False),
@@ -424,19 +424,6 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_gaji_employee_client_id'), table_name='tbl_gaji_employee')
     op.drop_index(op.f('ix_tbl_gaji_employee_bpjs_id'), table_name='tbl_gaji_employee')
     op.drop_table('tbl_gaji_employee')
-    op.drop_index(op.f('ix_tbl_activation_user_id'), table_name='tbl_activation')
-    op.drop_index(op.f('ix_tbl_activation_id'), table_name='tbl_activation')
-    op.drop_table('tbl_activation')
-    op.drop_index(op.f('ix_tbl_user_username'), table_name='tbl_user')
-    op.drop_index(op.f('ix_tbl_user_status'), table_name='tbl_user')
-    op.drop_index(op.f('ix_tbl_user_name'), table_name='tbl_user')
-    op.drop_index(op.f('ix_tbl_user_id_type'), table_name='tbl_user')
-    op.drop_index(op.f('ix_tbl_user_id_number'), table_name='tbl_user')
-    op.drop_index(op.f('ix_tbl_user_id'), table_name='tbl_user')
-    op.drop_index(op.f('ix_tbl_user_group_id'), table_name='tbl_user')
-    op.drop_index(op.f('ix_tbl_user_email'), table_name='tbl_user')
-    op.drop_index(op.f('ix_tbl_user_client_id'), table_name='tbl_user')
-    op.drop_table('tbl_user')
     op.drop_index(op.f('ix_tbl_subscription_updated_at'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_start'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_price'), table_name='tbl_subscription')
@@ -499,11 +486,24 @@ def downgrade():
     op.drop_index(op.f('ix_set_gaji_bpjs_client_id'), table_name='set_gaji_bpjs')
     op.drop_index(op.f('ix_set_gaji_bpjs_besaran'), table_name='set_gaji_bpjs')
     op.drop_table('set_gaji_bpjs')
+    op.drop_index(op.f('ix_tbl_client_user_id'), table_name='tbl_client')
     op.drop_index(op.f('ix_tbl_client_responsible_id_type'), table_name='tbl_client')
     op.drop_index(op.f('ix_tbl_client_responsible_id_number'), table_name='tbl_client')
     op.drop_index(op.f('ix_tbl_client_name'), table_name='tbl_client')
     op.drop_index(op.f('ix_tbl_client_id'), table_name='tbl_client')
     op.drop_table('tbl_client')
+    op.drop_index(op.f('ix_tbl_activation_user_id'), table_name='tbl_activation')
+    op.drop_index(op.f('ix_tbl_activation_id'), table_name='tbl_activation')
+    op.drop_table('tbl_activation')
+    op.drop_index(op.f('ix_tbl_user_username'), table_name='tbl_user')
+    op.drop_index(op.f('ix_tbl_user_status'), table_name='tbl_user')
+    op.drop_index(op.f('ix_tbl_user_name'), table_name='tbl_user')
+    op.drop_index(op.f('ix_tbl_user_id_type'), table_name='tbl_user')
+    op.drop_index(op.f('ix_tbl_user_id_number'), table_name='tbl_user')
+    op.drop_index(op.f('ix_tbl_user_id'), table_name='tbl_user')
+    op.drop_index(op.f('ix_tbl_user_group_id'), table_name='tbl_user')
+    op.drop_index(op.f('ix_tbl_user_email'), table_name='tbl_user')
+    op.drop_table('tbl_user')
     op.drop_index(op.f('ix_tbl_subscription_plan_updated_at'), table_name='tbl_subscription_plan')
     op.drop_index(op.f('ix_tbl_subscription_plan_plan'), table_name='tbl_subscription_plan')
     op.drop_index(op.f('ix_tbl_subscription_plan_monthly_price'), table_name='tbl_subscription_plan')
