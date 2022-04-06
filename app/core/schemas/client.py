@@ -21,8 +21,8 @@ class Client(BaseModel):
         orm_mode = True
 
 
-class ClientDetail(BaseModel):
-    client_id: int
+class ProjectDetail(BaseModel):
+    id: int
 
     class Config:
         orm_mode = True

@@ -64,10 +64,10 @@ async def list_project(current_user: User = Depends(auth.get_current_active_user
 
 @router.post("/project-detail/", response_model=schema_client.Client, status_code=status.HTTP_200_OK)
 async def project_detail(
-        client: schema_client.ClientDetail,
+        client: schema_client.ProjectDetail,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
-    dt_project = service_client.project_detail(user_id=current_user.id, client_id=client.client_id, db=db)
+    dt_project = service_client.project_detail(user_id=current_user.id, client_id=client.id, db=db)
     return dt_project
 
 
