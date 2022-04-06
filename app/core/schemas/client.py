@@ -19,3 +19,10 @@ class Client(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ClientDetail(BaseModel):
+    client_id: int
+
+    class Config:
+        orm_mode = True

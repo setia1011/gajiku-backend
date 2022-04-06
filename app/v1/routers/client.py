@@ -56,15 +56,19 @@ async def register_project(
         db.close()
 
 
-@router.get("/list-project/", response_model=list[schema_client.Client])
+@router.get("/list-project/", response_model=list[schema_client.Client], status_code=status.HTTP_200_OK)
 async def list_project(current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
     dt_project = service_client.list_project(user_id=current_user.id, db=db)
     return dt_project
 
 
-@router.post("/project-detail/")
-async def project_detail():
-    return {}
+@router.post("/project-detail/", response_model=schema_client.Client, status_code=status.HTTP_200_OK)
+async def project_detail(
+        client: schema_client.ClientDetail,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
+    dt_project = service_client.project_detail(user_id=current_user.id, client_id=client.client_id, db=db)
+    return dt_project
 
 
 @router.post("/subscribe-plan/")
