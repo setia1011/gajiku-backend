@@ -20,4 +20,4 @@ class Client(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     ref_id_type = relationship('RefUserIdType', backref='tbl_client')
-    ref_user = relationship('User', backref='tbl_client')
+    # ref_user = relationship('User', backref='tbl_client')

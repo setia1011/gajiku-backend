@@ -10,6 +10,8 @@ class Subscription(BaseModel):
     subs_price: Optional[float]
     subs_start: Optional[datetime.datetime]
     subs_end: Optional[datetime.datetime]
+    token: Optional[str]
+    client_id: Optional[int]
     creator: Optional[int]
     created_at: Optional[datetime.datetime]
     editor: Optional[int]

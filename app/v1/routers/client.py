@@ -74,7 +74,7 @@ async def project_detail(
     return dt_project
 
 
-@router.post("/subscribe-plan/")
+@router.post("/subscribe-plan/", response_model=sch_subs.Subscription)
 async def subscribe_plan(
         subs: sch_subs.SubscribePlan,
         current_user: User = Depends(auth.get_current_active_user),
@@ -113,8 +113,7 @@ async def subscribe_plan(
         db.add(dt_subscription_plan)
         db.commit()
         db.refresh(dt_subscription_plan)
-
-        return {"data": dt_subscription_plan}
+        return dt_subscription_plan
     except Exception:
         raise
     finally:
