@@ -56,3 +56,8 @@ async def update_group(schema: schema_user.GroupUpdate, current_user: User = Dep
         raise
     finally:
         db.close()
+
+
+@router.put("/activate-subscribe/")
+async def activate_subscribe():
+    return {}
