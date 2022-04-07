@@ -1,8 +1,10 @@
 from fastapi import APIRouter
+from app.core.schemas import home
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=home.HomeInfoOut)
 async def home():
-    return {"data": "Welcome! You are at home API now.."}
+    data = {"data": "Welcome! You are at home API now.."}
+    return data
