@@ -8,6 +8,18 @@ It is recommended to use virtual environment in the project, in order to create 
 
 I am using virtualenv https://virtualenv.pypa.io/
 
+###Install virtualenv:  
+pip install virtualenv  
+
+###Create virtual environment in directory project:  
+virtualenv venv
+
+###Activate virtual mode in windows command:  
+venv\Scripts\activate
+
+###Activate virtual mode in bash command:
+source venv/Scripts/activate
+
 # Install all libraries
 pip install -r requirements.txt
 
