@@ -13,7 +13,7 @@ from app.core.schemas import administrator as schema_administrator
 router = APIRouter()
 
 
-@router.get("/list-user/", response_model=list[schema_user.UserDetailOut], status_code=status.HTTP_200_OK)
+@router.get("/list-user/", response_model=list[schema_user.UserDetailOut], dependencies=[Depends(auth.admin)], status_code=status.HTTP_200_OK)
 async def list_user(db: Session = Depends(db_session)):
     user_list = service_user.user_list(db=db)
     try:
@@ -32,7 +32,7 @@ async def list_user(db: Session = Depends(db_session)):
         db.close()
 
 
-@router.post("/user-detail/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
+@router.post("/user-detail/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.admin)], status_code=status.HTTP_200_OK)
 async def user_detail(user: schema_user.FindUserByUsername, db: Session = Depends(db_session)):
     try:
         dt_user = service_user.find_user_by_username_3(username=user.username, db=db)
@@ -43,7 +43,7 @@ async def user_detail(user: schema_user.FindUserByUsername, db: Session = Depend
         db.close()
 
 
-@router.put("/update-group/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
+@router.put("/update-group/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.admin)], status_code=status.HTTP_200_OK)
 async def update_group(schema: schema_user.GroupUpdate, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
     try:
         current_user.group_id = schema.group_id
@@ -61,8 +61,11 @@ async def update_group(schema: schema_user.GroupUpdate, current_user: User = Dep
         db.close()
 
 
-@router.put("/activate-subscription/", response_model=schema_responses.Simple, status_code=status.HTTP_200_OK)
-async def activate_subscription(subs: schema_administrator.ActivateSubscription, db: Session = Depends(db_session)):
+@router.put("/activate-subscription/", response_model=schema_responses.Simple, dependencies=[Depends(auth.admin)], status_code=status.HTTP_200_OK)
+async def activate_subscription(
+        subs: schema_administrator.ActivateSubscription,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
     try:
         dt_subs = service_administrator.find_subscription_by_id(subs_id=subs.subs_id, db=db)
         if not dt_subs:
@@ -73,6 +76,7 @@ async def activate_subscription(subs: schema_administrator.ActivateSubscription,
 
         if dt_subs.status == 'pending':
             dt_subs.status = 'active'
+            dt_subs.editor = current_user.id
             db.add(dt_subs)
             db.commit()
             db.refresh(dt_subs)
