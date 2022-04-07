@@ -11,10 +11,10 @@ I am using virtualenv https://virtualenv.pypa.io/
 ### Install virtualenv:  
 pip install virtualenv  
 
-### Create virtual environment in directory project:  
+### Create virtual environment with directory project:  
 virtualenv venv
 
-### Activate virtual mode in windows command:  
+### Activate virtual mode with windows command:  
 venv\Scripts\activate
 
 ### Activate virtual mode in bash command:
