@@ -1,7 +1,7 @@
 # gajiku-backend
 Rest API (backend) Gajiku
 
-![screenshot.png](screenshot.png)
+![screenshot.png](screenshot.PNG)
 
 # Virtual environment
 It is recommended to use virtual environment in the project, in order to create an isolated environment. This means that the project can have its own dependencies, regardless of what dependencies every other project has.
