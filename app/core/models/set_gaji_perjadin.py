@@ -24,4 +24,6 @@ class SetGajiPerjadin(Base):
     editor = Column(Integer)
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    ref_client = relationship("Client", backref="set_gaji_bpjs")
+    ref_client = relationship("Client", backref="set_gaji_perjadin")
+    ref_golongan = relationship("SetGajiGolongan", backref="set_gaji_perjadin")
+    ref_provinsi = relationship("RefProvinsi", backref="set_gaji_perjadin")
