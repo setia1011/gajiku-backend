@@ -16,3 +16,5 @@ from app.core.models.set_gaji_status_kawin import SetGajiStatusKawin
 from app.core.models.subscription import Subscription
 from app.core.models.subscription_plan import SubscriptionPlan
 from app.core.models.user import User
+from app.core.models.set_gaji_perjadin import SetGajiPerjadin
+from app.core.models.ref_provinsi import RefProvinsi

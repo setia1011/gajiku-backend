@@ -1,6 +1,13 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from app.core.models import RefUserGroup, RefUserIdType, User, SubscriptionPlan
+from app.core.models import RefUserGroup, RefUserIdType, User, SubscriptionPlan, RefProvinsi
+
+
+def create_provinsi(
+        provinsi: str,
+        db: Session = Depends):
+    dt_provinsi = RefProvinsi(provinsi=provinsi)
+    return dt_provinsi
 
 
 def create_user_group(

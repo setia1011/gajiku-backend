@@ -15,6 +15,17 @@ router = APIRouter()
 
 @router.post("/install/", status_code=status.HTTP_200_OK)
 async def install(db: Session = Depends(db_session)):
+    # Insert provinsi
+    provinsi = settings.CORE_PATH + "/data/provinsi.csv"
+    df_provinsi = pd.read_csv(provinsi, usecols=["provinsi"])
+    for i, val in df_provinsi.iterrows():
+        dt_provinsi = service_reference.create_provinsi(
+            provinsi=val['provinsi'],
+            db=db)
+        db.add(dt_provinsi)
+        db.commit()
+        db.refresh(dt_provinsi)
+
     # Insert groups
     groups = settings.CORE_PATH + "/data/groups.csv"
     df_groups = pd.read_csv(groups, usecols=["group_name","group_description"])
