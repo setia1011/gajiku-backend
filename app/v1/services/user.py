@@ -44,7 +44,6 @@ def find_client_exists(project: str, db: Session = Depends):
     return dt_client
 
 
-
 def find_user_by_username(username: str, db: Session = Depends):
     dt_user = db.query(User).filter(User.username == username).first()
     return dt_user
