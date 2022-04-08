@@ -39,6 +39,20 @@ class SubscribePlan(BaseModel):
         }
 
 
+class SubscribeOut(BaseModel):
+    id: Optional[int]
+    plan: Optional[str]
+    monthly_price: Optional[float]
+    status: Optional[str]
+    creator: Optional[int]
+    created_at: Optional[datetime.datetime]
+    editor: Optional[int]
+    updated_at: Optional[datetime.datetime]
+
+    class Config:
+        orm_mode = True
+
+
 class User(BaseModel):
     name: Optional[str]
 

@@ -10,16 +10,16 @@ from app.v1.services import subscription as serv_subs
 router = APIRouter()
 
 
-@router.get("/plan/{subs_plan_id}")
+@router.get("/plan/{subs_plan_id}", response_model=sch_subs.SubscribeOut)
 async def plan(subs_plan_id: int, db: Session = Depends(db_session)):
     dt_subscription_plan = serv_subs.plan(subs_plan_id=subs_plan_id, db=db)
-    return {"data": dt_subscription_plan}
+    return dt_subscription_plan
 
 
-@router.get("/list-plan/")
+@router.get("/list-plan/", response_model=list[sch_subs.SubscribeOut])
 async def list_plan(db: Session = Depends(db_session)):
     dt_subscription_plan = serv_subs.list_plan(db=db)
-    return {"data": dt_subscription_plan}
+    return dt_subscription_plan
 
 
 @router.put("/upgrade-plan/")
