@@ -11,3 +11,12 @@ class RefUserGroup(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class RefIdType(BaseModel):
+    id: Optional[int]
+    id_type: Optional[str]
+    id_description: Optional[str]
+
+    class Config:
+        orm_mode = True
