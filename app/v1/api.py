@@ -1,5 +1,14 @@
 from fastapi import APIRouter
-from app.v1.routers import user, settings, subscription, client, playground, home, administrator, gaji
+from app.v1.routers import \
+    user, \
+    settings, \
+    subscription, \
+    client, \
+    playground, \
+    home, \
+    administrator, \
+    gaji, \
+    reference
 
 
 router_v1 = APIRouter()
@@ -11,3 +20,4 @@ router_v1.include_router(subscription.router, prefix="/v1/subscription", tags=["
 router_v1.include_router(gaji.router, prefix="/v1/gaji", tags=["gaji"])
 router_v1.include_router(settings.router, prefix="/v1/settings", tags=["settings"])
 router_v1.include_router(playground.router, prefix="/v1/playground", tags=["playground"])
+router_v1.include_router(reference.router, prefix="/v1/reference", tags=["reference"])
