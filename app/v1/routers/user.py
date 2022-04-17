@@ -147,10 +147,7 @@ async def login(user: schema_user.UserLogin, db: Session = Depends(db_session)):
         }
         return data
     except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Terjadi kesalahan"
-        )
+        raise
     finally:
         db.close()
 
