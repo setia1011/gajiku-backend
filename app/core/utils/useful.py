@@ -11,7 +11,9 @@ def random_string(length):
 
 
 def acticode(length):
-    random_str = ''.join(random.choice('0123456789A') for i in range(length))
+    # random_str = ''.join(random.choice('0123456789A') for i in range(length))
+    # Only numbers
+    random_str = ''.join(random.choice('0123456789') for i in range(length))
     return random_str
 
 
