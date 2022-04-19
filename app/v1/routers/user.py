@@ -113,7 +113,7 @@ async def activation(schema: schema_user.Activation, db: Session = Depends(db_se
             db.add(dt_user)
             db.commit()
             db.refresh(dt_user)
-            response = "Aktivasi berhasil"
+            response = "Aktivasi berhasil, silahkan login"
         except Exception:
             db.rollback()
             raise
