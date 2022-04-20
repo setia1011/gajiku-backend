@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 7f8f59db2a3b
+Revision ID: 2f5f226a806a
 Revises: 
-Create Date: 2022-04-08 05:35:12.613674
+Create Date: 2022-04-20 08:27:34.286563
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7f8f59db2a3b'
+revision = '2f5f226a806a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -148,7 +148,9 @@ def upgrade():
     op.create_index(op.f('ix_set_gaji_bpjs_status'), 'set_gaji_bpjs', ['status'], unique=False)
     op.create_table('set_gaji_golongan',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('kode', sa.String(length=50), nullable=False),
+    sa.Column('golongan', sa.String(length=50), nullable=True),
+    sa.Column('ruang', sa.String(length=50), nullable=True),
+    sa.Column('pangkat', sa.String(length=50), nullable=True),
     sa.Column('keterangan', sa.String(length=500), nullable=True),
     sa.Column('client_id', sa.Integer(), nullable=False),
     sa.Column('creator', sa.Integer(), nullable=False),
@@ -159,9 +161,11 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_set_gaji_golongan_client_id'), 'set_gaji_golongan', ['client_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_golongan_golongan'), 'set_gaji_golongan', ['golongan'], unique=False)
     op.create_index(op.f('ix_set_gaji_golongan_id'), 'set_gaji_golongan', ['id'], unique=False)
     op.create_index(op.f('ix_set_gaji_golongan_keterangan'), 'set_gaji_golongan', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_golongan_kode'), 'set_gaji_golongan', ['kode'], unique=False)
+    op.create_index(op.f('ix_set_gaji_golongan_pangkat'), 'set_gaji_golongan', ['pangkat'], unique=False)
+    op.create_index(op.f('ix_set_gaji_golongan_ruang'), 'set_gaji_golongan', ['ruang'], unique=False)
     op.create_table('set_gaji_grade',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('kode', sa.String(length=50), nullable=False),
@@ -194,22 +198,6 @@ def upgrade():
     op.create_index(op.f('ix_set_gaji_jabatan_id'), 'set_gaji_jabatan', ['id'], unique=False)
     op.create_index(op.f('ix_set_gaji_jabatan_keterangan'), 'set_gaji_jabatan', ['keterangan'], unique=False)
     op.create_index(op.f('ix_set_gaji_jabatan_kode'), 'set_gaji_jabatan', ['kode'], unique=False)
-    op.create_table('set_gaji_pangkat',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('kode', sa.String(length=50), nullable=False),
-    sa.Column('keterangan', sa.String(length=500), nullable=True),
-    sa.Column('client_id', sa.Integer(), nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['client_id'], ['tbl_client.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_pangkat_client_id'), 'set_gaji_pangkat', ['client_id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_pangkat_id'), 'set_gaji_pangkat', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_pangkat_keterangan'), 'set_gaji_pangkat', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_pangkat_kode'), 'set_gaji_pangkat', ['kode'], unique=False)
     op.create_table('set_gaji_penghasilan',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('komponen', sa.String(length=200), nullable=False),
@@ -314,8 +302,6 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_updated_at'), 'tbl_subscription', ['updated_at'], unique=False)
     op.create_table('set_gaji_perjadin',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('kode', sa.String(length=50), nullable=False),
-    sa.Column('keterangan', sa.String(length=500), nullable=True),
     sa.Column('golongan_id', sa.Integer(), nullable=False),
     sa.Column('uang_harian', sa.Float(), nullable=True),
     sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
@@ -338,8 +324,6 @@ def upgrade():
     op.create_index(op.f('ix_set_gaji_perjadin_golongan_id'), 'set_gaji_perjadin', ['golongan_id'], unique=False)
     op.create_index(op.f('ix_set_gaji_perjadin_id'), 'set_gaji_perjadin', ['id'], unique=False)
     op.create_index(op.f('ix_set_gaji_perjadin_jenis_besaran'), 'set_gaji_perjadin', ['jenis_besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_perjadin_keterangan'), 'set_gaji_perjadin', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_perjadin_kode'), 'set_gaji_perjadin', ['kode'], unique=False)
     op.create_index(op.f('ix_set_gaji_perjadin_provinsi_id'), 'set_gaji_perjadin', ['provinsi_id'], unique=False)
     op.create_index(op.f('ix_set_gaji_perjadin_status'), 'set_gaji_perjadin', ['status'], unique=False)
     op.create_index(op.f('ix_set_gaji_perjadin_uang_harian'), 'set_gaji_perjadin', ['uang_harian'], unique=False)
@@ -349,7 +333,6 @@ def upgrade():
     sa.Column('id_number', sa.String(length=50), nullable=False),
     sa.Column('id_type', sa.Integer(), nullable=False),
     sa.Column('jabatan_id', sa.Integer(), nullable=True),
-    sa.Column('pangkat_id', sa.Integer(), nullable=True),
     sa.Column('golongan_id', sa.Integer(), nullable=True),
     sa.Column('grade_id', sa.Integer(), nullable=True),
     sa.Column('masa_kerja', sa.Integer(), nullable=True),
@@ -367,7 +350,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['grade_id'], ['set_gaji_grade.id'], ),
     sa.ForeignKeyConstraint(['id_type'], ['ref_user_id_type.id'], ),
     sa.ForeignKeyConstraint(['jabatan_id'], ['set_gaji_jabatan.id'], ),
-    sa.ForeignKeyConstraint(['pangkat_id'], ['set_gaji_pangkat.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tbl_gaji_employee_bpjs_id'), 'tbl_gaji_employee', ['bpjs_id'], unique=False)
@@ -380,7 +362,6 @@ def upgrade():
     op.create_index(op.f('ix_tbl_gaji_employee_jabatan_id'), 'tbl_gaji_employee', ['jabatan_id'], unique=False)
     op.create_index(op.f('ix_tbl_gaji_employee_masa_kerja'), 'tbl_gaji_employee', ['masa_kerja'], unique=False)
     op.create_index(op.f('ix_tbl_gaji_employee_name'), 'tbl_gaji_employee', ['name'], unique=False)
-    op.create_index(op.f('ix_tbl_gaji_employee_pangkat_id'), 'tbl_gaji_employee', ['pangkat_id'], unique=False)
     op.create_index(op.f('ix_tbl_gaji_employee_status_bekerja'), 'tbl_gaji_employee', ['status_bekerja'], unique=False)
     op.create_index(op.f('ix_tbl_gaji_employee_status_kawin'), 'tbl_gaji_employee', ['status_kawin'], unique=False)
     op.create_table('tbl_gaji_master_penghasilan',
@@ -452,7 +433,6 @@ def downgrade():
     op.drop_table('tbl_gaji_master_penghasilan')
     op.drop_index(op.f('ix_tbl_gaji_employee_status_kawin'), table_name='tbl_gaji_employee')
     op.drop_index(op.f('ix_tbl_gaji_employee_status_bekerja'), table_name='tbl_gaji_employee')
-    op.drop_index(op.f('ix_tbl_gaji_employee_pangkat_id'), table_name='tbl_gaji_employee')
     op.drop_index(op.f('ix_tbl_gaji_employee_name'), table_name='tbl_gaji_employee')
     op.drop_index(op.f('ix_tbl_gaji_employee_masa_kerja'), table_name='tbl_gaji_employee')
     op.drop_index(op.f('ix_tbl_gaji_employee_jabatan_id'), table_name='tbl_gaji_employee')
@@ -467,8 +447,6 @@ def downgrade():
     op.drop_index(op.f('ix_set_gaji_perjadin_uang_harian'), table_name='set_gaji_perjadin')
     op.drop_index(op.f('ix_set_gaji_perjadin_status'), table_name='set_gaji_perjadin')
     op.drop_index(op.f('ix_set_gaji_perjadin_provinsi_id'), table_name='set_gaji_perjadin')
-    op.drop_index(op.f('ix_set_gaji_perjadin_kode'), table_name='set_gaji_perjadin')
-    op.drop_index(op.f('ix_set_gaji_perjadin_keterangan'), table_name='set_gaji_perjadin')
     op.drop_index(op.f('ix_set_gaji_perjadin_jenis_besaran'), table_name='set_gaji_perjadin')
     op.drop_index(op.f('ix_set_gaji_perjadin_id'), table_name='set_gaji_perjadin')
     op.drop_index(op.f('ix_set_gaji_perjadin_golongan_id'), table_name='set_gaji_perjadin')
@@ -509,11 +487,6 @@ def downgrade():
     op.drop_index(op.f('ix_set_gaji_penghasilan_client_id'), table_name='set_gaji_penghasilan')
     op.drop_index(op.f('ix_set_gaji_penghasilan_besaran'), table_name='set_gaji_penghasilan')
     op.drop_table('set_gaji_penghasilan')
-    op.drop_index(op.f('ix_set_gaji_pangkat_kode'), table_name='set_gaji_pangkat')
-    op.drop_index(op.f('ix_set_gaji_pangkat_keterangan'), table_name='set_gaji_pangkat')
-    op.drop_index(op.f('ix_set_gaji_pangkat_id'), table_name='set_gaji_pangkat')
-    op.drop_index(op.f('ix_set_gaji_pangkat_client_id'), table_name='set_gaji_pangkat')
-    op.drop_table('set_gaji_pangkat')
     op.drop_index(op.f('ix_set_gaji_jabatan_kode'), table_name='set_gaji_jabatan')
     op.drop_index(op.f('ix_set_gaji_jabatan_keterangan'), table_name='set_gaji_jabatan')
     op.drop_index(op.f('ix_set_gaji_jabatan_id'), table_name='set_gaji_jabatan')
@@ -524,9 +497,11 @@ def downgrade():
     op.drop_index(op.f('ix_set_gaji_grade_id'), table_name='set_gaji_grade')
     op.drop_index(op.f('ix_set_gaji_grade_client_id'), table_name='set_gaji_grade')
     op.drop_table('set_gaji_grade')
-    op.drop_index(op.f('ix_set_gaji_golongan_kode'), table_name='set_gaji_golongan')
+    op.drop_index(op.f('ix_set_gaji_golongan_ruang'), table_name='set_gaji_golongan')
+    op.drop_index(op.f('ix_set_gaji_golongan_pangkat'), table_name='set_gaji_golongan')
     op.drop_index(op.f('ix_set_gaji_golongan_keterangan'), table_name='set_gaji_golongan')
     op.drop_index(op.f('ix_set_gaji_golongan_id'), table_name='set_gaji_golongan')
+    op.drop_index(op.f('ix_set_gaji_golongan_golongan'), table_name='set_gaji_golongan')
     op.drop_index(op.f('ix_set_gaji_golongan_client_id'), table_name='set_gaji_golongan')
     op.drop_table('set_gaji_golongan')
     op.drop_index(op.f('ix_set_gaji_bpjs_status'), table_name='set_gaji_bpjs')

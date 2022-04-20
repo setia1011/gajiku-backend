@@ -9,7 +9,7 @@ from app.core.models.set_gaji_bpjs import SetGajiBpjs
 from app.core.models.set_gaji_golongan import SetGajiGolongan
 from app.core.models.set_gaji_grade import SetGajiGrade
 from app.core.models.set_gaji_jabatan import SetGajiJabatan
-from app.core.models.set_gaji_pangkat import SetGajiPangkat
+# from app.core.models.set_gaji_pangkat import SetGajiPangkat
 from app.core.models.set_gaji_penghasilan import SetGajiPenghasilan
 from app.core.models.set_gaji_potongan import SetGajiPotongan
 from app.core.models.set_gaji_status_kawin import SetGajiStatusKawin

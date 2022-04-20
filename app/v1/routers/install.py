@@ -1,20 +1,18 @@
 import pandas as pd
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from app.core.database import db_session
 from app.core.utils.auth import get_password_hash
 from app.core.config import settings
-from app.core.utils.auth import get_current_active_user
-from app.core.schemas.settings import UserGroup, UserIdType
-from app.core.models.user import User
-from app.v1.services import settings as service_reference
+from app.core.schemas import responses as schema_responses
+from app.v1.services import install as service_reference
 
 
 router = APIRouter()
 
 
-@router.post("/install/", status_code=status.HTTP_200_OK)
-async def install(db: Session = Depends(db_session)):
+@router.post("/db-initial/", response_model=schema_responses.Simple, status_code=status.HTTP_200_OK)
+async def db_initial(db: Session = Depends(db_session)):
     # Insert provinsi
     provinsi = settings.CORE_PATH + "/data/provinsi.csv"
     df_provinsi = pd.read_csv(provinsi, usecols=["provinsi"])
@@ -80,53 +78,5 @@ async def install(db: Session = Depends(db_session)):
         db.commit()
         db.refresh(_subscription_plan)
 
-    return {"data": "Install data settings berhasil"}
-
-
-@router.post("/create-group/", status_code=status.HTTP_200_OK)
-async def create_group(
-        settings_schema: UserGroup,
-        db: Session = Depends(db_session),
-        current_user: User = Depends(get_current_active_user)):
-    try:
-        # Create user groups
-        user_group = service_reference.create_user_group(
-            group_name=settings_schema.group_name,
-            group_description=settings_schema.group_description,
-            db=db)
-        db.add(user_group)
-        db.commit()
-        db.refresh(user_group)
-        return {"data": "Berhasil menambahkan grup"}
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
-
-
-@router.post("/create-id-type/", status_code=status.HTTP_200_OK)
-async def create_id_type(
-        settings_schema: UserIdType,
-        db: Session = Depends(db_session),
-        current_user: User = Depends(get_current_active_user)):
-    try:
-        # Create id types
-        id_type = service_reference.create_id_type(
-            id_type=settings_schema.id_type,
-            id_description=settings_schema.id_description,
-            db=db)
-        db.add(id_type)
-        db.commit()
-        db.refresh(id_type)
-        return {"data": "Berhasil menambahkan jenis ID"}
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
-
-
-@router.post("/create-subscription-plan/", status_code=status.HTTP_200_OK)
-async def create_subscription_plan():
-    return {}
+    data = {"data": "Install data berhasil"}
+    return data

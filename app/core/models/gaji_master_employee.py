@@ -13,7 +13,7 @@ class GajiMasterEmployee(Base):
     id_type = Column(Integer, ForeignKey("ref_user_id_type.id"), nullable=False, index=True)
 
     jabatan_id = Column(Integer, ForeignKey("set_gaji_jabatan.id"), index=True)
-    pangkat_id = Column(Integer, ForeignKey("set_gaji_pangkat.id"), index=True)
+    # pangkat_id = Column(Integer, ForeignKey("set_gaji_pangkat.id"), index=True)
     golongan_id = Column(Integer, ForeignKey("set_gaji_golongan.id"), index=True)
     grade_id = Column(Integer, ForeignKey("set_gaji_grade.id"), index=True)
     masa_kerja = Column(Integer, index=True)

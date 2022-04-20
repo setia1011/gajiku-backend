@@ -8,8 +8,6 @@ class SetGajiPerjadin(Base):
     __tablename__ = "set_gaji_perjadin"
 
     id = Column(Integer, primary_key=True, index=True)
-    kode = Column(String(50), nullable=False, index=True)
-    keterangan = Column(String(500), index=True)
     golongan_id = Column(Integer, ForeignKey("set_gaji_golongan.id"), nullable=False, index=True)
     uang_harian = Column(Float, index=True)
     jenis_besaran = Column(Enum("persentase", "spesifik"), nullable=False, index=True)

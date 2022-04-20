@@ -10,6 +10,11 @@ from app.v1.services import subscription as serv_subs
 router = APIRouter()
 
 
+@router.post("/plan/", status_code=status.HTTP_200_OK)
+async def plan():
+    return {}
+
+
 @router.get("/plan/{subs_plan_id}", response_model=sch_subs.SubscribeOut)
 async def plan(subs_plan_id: int, db: Session = Depends(db_session)):
     dt_subscription_plan = serv_subs.plan(subs_plan_id=subs_plan_id, db=db)

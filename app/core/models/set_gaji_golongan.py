@@ -8,7 +8,9 @@ class SetGajiGolongan(Base):
     __tablename__ = "set_gaji_golongan"
 
     id = Column(Integer, primary_key=True, index=True)
-    kode = Column(String(50), nullable=False, index=True)
+    golongan = Column(String(50), index=True)
+    ruang = Column(String(50), index=True)
+    pangkat = Column(String(50), index=True)
     keterangan = Column(String(500), index=True)
     client_id = Column(Integer, ForeignKey("tbl_client.id"), nullable=False, index=True)
     creator = Column(Integer, nullable=False)
