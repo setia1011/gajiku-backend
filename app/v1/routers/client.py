@@ -80,6 +80,7 @@ async def subscribe_plan(
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
     try:
+        # Cek plan yang minta available di dalam tabel subscribe_plan
         subscription_plan = serv_subs.plan(subs_plan_id=subs.subs_plan_id, db=db)
         if not subscription_plan:
             raise HTTPException(
@@ -91,6 +92,14 @@ async def subscribe_plan(
         if not client:
             raise HTTPException(
                 detail="Data client tidak valid",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Kalau masih punya subs pending ga boleh subs baru
+        dt_subscribe = serv_subs.subscribe(client_id=client.id, db=db)
+        if dt_subscribe:
+            raise HTTPException(
+                detail="Anda masih mempunyai project dengan status pending",
                 status_code=status.HTTP_400_BAD_REQUEST
             )
 

@@ -15,6 +15,11 @@ def list_plan(db: Session = Depends):
     return dt_subscription_plan
 
 
+def subscribe(client_id: int, db: Session = Depends):
+    dt_subscribe = db.query(Subscription).filter(Subscription.client_id == client_id).filter(Subscription.status == "pending").all()
+    return dt_subscribe
+
+
 def subscribe_plan(
         subs_plan_id: int,
         subs_month: int,
