@@ -28,7 +28,7 @@ class GajiMasterEmployee(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     set_jabatan = relationship('SetGajiJabatan', backref='tbl_gaji_employee')
-    set_pangkat = relationship('SetGajiPangkat', backref='tbl_gaji_employee')
+    # set_pangkat = relationship('SetGajiPangkat', backref='tbl_gaji_employee')
     set_golongan = relationship('SetGajiGolongan', backref='tbl_gaji_employee')
     set_grade = relationship('SetGajiGrade', backref='tbl_gaji_employee')
     set_bpjs = relationship('SetGajiBpjs', backref='tbl_gaji_employee')

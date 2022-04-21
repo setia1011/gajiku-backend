@@ -158,6 +158,8 @@ async def update(
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
     try:
+        if current_user.email != user.email:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not authenticated")
         if not current_user:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data tidak valid")
         current_user.editor = current_user.id
