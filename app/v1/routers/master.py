@@ -12,7 +12,7 @@ from app.core.utils import auth
 router = APIRouter()
 
 
-@router.post("/pangkat/", response_model=schema_master.Pangkat, dependencies=[Depends(auth.default)])
+@router.post("/pangkat/", response_model=schema_master.Pangkat, dependencies=[Depends(auth.client)])
 async def pangkat(
         schema: schema_master.PangkatIn,
         current_user: User = Depends(auth.get_current_active_user),
@@ -40,8 +40,26 @@ async def pangkat(
         db.close()
 
 
-@router.post("/jabatan/")
-async def jabatan():
+@router.post("/jabatan/", response_model=schema_master.Jabatan, dependencies=[Depends(auth.client)])
+async def jabatan(schema: schema_master.JabatanIn, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
+    try:
+        dt_jabatan = service_master.create_jabatan(
+            kategori=schema.kategori,
+            jabatan=schema.jabatan,
+            besaran=schema.besaran,
+            jenis_besaran=schema.jenis_besaran,
+            keterangan=schema.keterangan,
+            db=db
+        )
+        dt_jabatan.creator = current_user.id
+        db.add(dt_jabatan)
+        db.commit()
+        db.refresh(dt_jabatan)
+        return dt_jabatan
+    except Exception:
+        raise
+    finally:
+        db.close()
     return {}
 
 

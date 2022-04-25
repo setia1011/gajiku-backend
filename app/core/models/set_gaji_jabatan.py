@@ -9,7 +9,7 @@ class SetGajiJabatan(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     kategori = Column(Enum('struktural','fungsional'), server_default='struktural', nullable=False, index=True)
-
+    jabatan = Column(String(100), nullable=False, index=True)
     besaran = Column(Float, index=True)
     jenis_besaran = Column(Enum("persentase", "spesifik"), nullable=False, index=True)
     dasar_penetapan = Column(String(500))
