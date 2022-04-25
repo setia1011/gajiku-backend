@@ -6,7 +6,7 @@ from app.core.schemas import reference as schema_reference
 from app.core.utils import auth, useful
 from app.core.utils.auth import get_current_active_user
 from app.core.schemas import responses as schema_responses
-from app.core.schemas.reference import UserGroup, UserIdType
+from app.core.schemas.reference import Group, UserIdType
 from app.core.models.user import User
 
 
@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.post("/group/", response_model=schema_responses.Simple, status_code=status.HTTP_200_OK)
 async def group(
-        settings_schema: UserGroup,
+        settings_schema: Group,
         db: Session = Depends(db_session),
         current_user: User = Depends(get_current_active_user)):
     try:
@@ -36,7 +36,7 @@ async def group(
         db.close()
 
 
-@router.get("/list-group/", response_model=list[schema_reference.RefUserGroup], dependencies=[Depends(auth.admin)], status_code=status.HTTP_200_OK)
+@router.get("/list-group/", response_model=list[schema_reference.RefGroup], dependencies=[Depends(auth.admin)], status_code=status.HTTP_200_OK)
 async def list_group(db: Session = Depends(db_session)):
     dt_ref_group = service_reference.list_ref_group(db=db)
     return dt_ref_group

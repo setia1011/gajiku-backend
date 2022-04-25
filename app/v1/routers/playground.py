@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.database import db_session
 from app.core.utils import auth
-from app.core.models import User, RefUserGroup, RefUserIdType
+from app.core.models import User, RefGroup, RefIdType
 from app.core.schemas import playground
 from app.v1.services import playground as crud_play
 
@@ -19,9 +19,9 @@ async def decode_tokens(current_user: User = Depends(auth.get_current_active_use
 
 @router.get("/user-detail/", dependencies=[Depends(auth.superuser)])
 async def user_detail(db: Session = Depends(db_session)):
-    _user_detail = db.query(User, RefUserGroup, RefUserIdType) \
-        .join(RefUserGroup, RefUserGroup.id == User.group_id, isouter=True) \
-        .join(RefUserIdType, RefUserIdType.id == User.id_type, isouter=True).all()
+    _user_detail = db.query(User, RefGroup, RefIdType) \
+        .join(RefGroup, RefGroup.id == User.group_id, isouter=True) \
+        .join(RefIdType, RefIdType.id == User.id_type, isouter=True).all()
 
     li = []
     ct = 0

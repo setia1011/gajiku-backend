@@ -10,7 +10,7 @@ class Employee(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(200), nullable=False, index=True)
     id_number = Column(String(50), nullable=False, index=True)
-    id_type = Column(Integer, ForeignKey("ref_user_id_type.id"), nullable=False, index=True)
+    id_type = Column(Integer, ForeignKey("ref_id_type.id"), nullable=False, index=True)
 
     jabatan_id = Column(Integer, ForeignKey("set_gaji_jabatan.id"), index=True)
     pangkat_id = Column(Integer, ForeignKey("set_gaji_pangkat.id"), index=True)

@@ -1,7 +1,7 @@
 import datetime
 from fastapi import Depends
 from sqlalchemy.orm import Session, selectinload
-from app.core.models import User, RefUserGroup, RefUserIdType
+from app.core.models import User, RefGroup, RefIdType
 from app.core.schemas import playground
 
 

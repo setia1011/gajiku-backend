@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class RefUserGroup(BaseModel):
+class RefGroup(BaseModel):
     id: Optional[int]
     group_name: Optional[str]
     group_description: Optional[str]
@@ -22,7 +22,7 @@ class RefIdType(BaseModel):
         orm_mode = True
 
 
-class UserGroup(BaseModel):
+class Group(BaseModel):
     group_name: str
     group_description: Optional[str]
 

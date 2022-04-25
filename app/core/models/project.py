@@ -11,7 +11,7 @@ class Project(Base):
     project = Column(String(255), nullable=False, index=True)
     address = Column(TEXT)
     responsible_name = Column(String(50), nullable=False)
-    responsible_id_type = Column(Integer, ForeignKey('ref_user_id_type.id'), nullable=False, index=True)
+    responsible_id_type = Column(Integer, ForeignKey('ref_id_type.id'), nullable=False, index=True)
     responsible_id_number = Column(String(50), nullable=False, index=True)
     user_id = Column(Integer, ForeignKey("tbl_user.id"), nullable=False, index=True)
     creator = Column(Integer, index=False)
@@ -19,4 +19,4 @@ class Project(Base):
     editor = Column(Integer)
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    ref_id_type = relationship('RefUserIdType', backref='tbl_project')
+    ref_id_type = relationship('RefIdType', backref='tbl_project')

@@ -12,10 +12,10 @@ class User(Base):
     password = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, nullable=False, index=True)
     name = Column(String(50), nullable=False, index=True)
-    group_id = Column(Integer, ForeignKey('ref_user_group.id'), server_default="4", index=True)
+    group_id = Column(Integer, ForeignKey('ref_group.id'), server_default="4", index=True)
     # client_id = Column(Integer, ForeignKey('tbl_client.id'), index=True)
 
-    id_type = Column(Integer, ForeignKey('ref_user_id_type.id'), index=True)
+    id_type = Column(Integer, ForeignKey('ref_id_type.id'), index=True)
     id_number = Column(String(50), index=True)
     phone = Column(String(15))
     address = Column(TEXT)
@@ -26,6 +26,6 @@ class User(Base):
     editor = Column(Integer)
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    ref_group = relationship('RefUserGroup', backref='tbl_user')
-    ref_id_type = relationship('RefUserIdType', backref='tbl_user')
+    ref_group = relationship('RefGroup', backref='tbl_user')
+    ref_id_type = relationship('RefIdType', backref='tbl_user')
     ref_project = relationship('Project', backref='tbl_user')
