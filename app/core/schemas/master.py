@@ -9,7 +9,7 @@ class Golongan(BaseModel):
     ruang: Optional[str]
     pangkat: Optional[str]
     keterangan: Optional[str]
-    client_id: Optional[int]
+    project_id: Optional[int]
     creator: Optional[int]
     created_at: Optional[datetime.datetime]
     editor: Optional[int]
@@ -24,6 +24,7 @@ class GolonganIn(BaseModel):
     ruang: str
     pangkat: str
     keterangan: Optional[str]
+    project_id: int
 
     class Config:
         orm_mode = True

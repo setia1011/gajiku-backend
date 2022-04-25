@@ -1,7 +1,7 @@
 import datetime
 from fastapi import Depends
 from sqlalchemy.orm import Session, selectinload
-from app.core.models import User, Activation, Client
+from app.core.models import User, Activation, Project
 
 
 def create_user(
@@ -14,7 +14,7 @@ def create_user(
     return dt_user
 
 
-def register_client(
+def register_project(
         project: str,
         address: str,
         responsible_name: str,
@@ -23,7 +23,7 @@ def register_client(
         user_id: int,
         creator: int,
         db: Session = Depends):
-    dt_client = Client(
+    dt_project = Project(
         project=project,
         address=address,
         responsible_name=responsible_name,
@@ -31,7 +31,7 @@ def register_client(
         responsible_id_number=responsible_id_number,
         user_id=user_id,
         creator=creator)
-    return dt_client
+    return dt_project
 
 
 def user_login(username: str, password: str, db: Session = Depends):
@@ -39,9 +39,9 @@ def user_login(username: str, password: str, db: Session = Depends):
     return dt_user
 
 
-def find_client_exists(project: str, db: Session = Depends):
-    dt_client = db.query(Client).filter(Client.project == project).first()
-    return dt_client
+def find_project_exists(project: str, db: Session = Depends):
+    dt_project = db.query(Project).filter(Project.project == project).first()
+    return dt_project
 
 
 def find_user_by_username(username: str, db: Session = Depends):
@@ -51,7 +51,7 @@ def find_user_by_username(username: str, db: Session = Depends):
 
 def find_user_by_username_3(username: str, db: Session = Depends):
     dt_user = db.query(User).filter(User.username == username) \
-        .options(selectinload(User.ref_group), selectinload(User.ref_id_type), selectinload(User.ref_client)).first()
+        .options(selectinload(User.ref_group), selectinload(User.ref_id_type), selectinload(User.ref_project)).first()
     return dt_user
 
 
@@ -71,7 +71,7 @@ def update_password(
 def user_list(db: Session = Depends):
     dt_user = db.query(User).options(selectinload(User.ref_group),
                                      selectinload(User.ref_id_type),
-                                     selectinload(User.ref_client)).all()
+                                     selectinload(User.ref_project)).all()
     return dt_user
 
 

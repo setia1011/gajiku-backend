@@ -18,10 +18,13 @@ async def golongan(schema: schema_master.GolonganIn, db: Session = Depends(db_se
         pangkat=schema.pangkat,
         ruang=schema.ruang,
         keterangan=schema.keterangan,
+        project_id=schema.project_id,
         db=db
     )
-    dt_golongan.client_id = 1
-    return {}
+    db.add(dt_golongan)
+    db.commit()
+    data = db.refresh(dt_golongan)
+    return data
 
 
 @router.post("/jabatan/")

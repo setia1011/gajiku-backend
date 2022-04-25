@@ -1,7 +1,6 @@
-import datetime
 from fastapi import Depends
-from sqlalchemy.orm import Session, selectinload
-from app.core.models import User, Activation, Client, Subscription
+from sqlalchemy.orm import Session
+from app.core.models import Subscription
 
 
 def find_subscription_by_id(subs_id: int, db: Session = Depends):

@@ -28,4 +28,4 @@ class User(Base):
 
     ref_group = relationship('RefUserGroup', backref='tbl_user')
     ref_id_type = relationship('RefUserIdType', backref='tbl_user')
-    ref_client = relationship('Client', backref='tbl_user')
+    ref_project = relationship('Project', backref='tbl_user')

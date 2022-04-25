@@ -9,5 +9,3 @@ class RefUserGroup(Base):
     id = Column(Integer, primary_key=True, index=True)
     group_name = Column(String(50), unique=True, nullable=False, index=True)
     group_description = Column(String(225))
-
-    # ref_user = relationship('User', backref='ref_user_group')

@@ -14,7 +14,7 @@ class User(BaseModel):
     status: Optional[str]
     group_id: Optional[int]
     creator: Optional[int]
-    # client_id: Optional[int]
+    # project_id: Optional[int]
     created_at: Optional[datetime.datetime]
     id_type: Optional[int]
     editor: Optional[int]
@@ -112,7 +112,7 @@ class UserIdType(BaseModel):
         orm_mode = True
 
 
-class UserClient(BaseModel):
+class UserProject(BaseModel):
     id: Optional[int]
     project: Optional[str]
     address: Optional[str]
@@ -132,13 +132,13 @@ class UserClient(BaseModel):
 class UserDetailOut(User):
     ref_group: UserGroup
     ref_id_type: Optional[UserIdType]
-    ref_client: Optional[list[UserClient]]
+    ref_project: Optional[list[UserProject]]
 
     class Config:
         orm_mode = True
 
 
-class RegisterClient(BaseModel):
+class RegisterProject(BaseModel):
     project: str
     address: str
     responsible_name: str

@@ -4,8 +4,8 @@ from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 
-class Client(Base):
-    __tablename__ = "tbl_client"
+class Project(Base):
+    __tablename__ = "tbl_project"
 
     id = Column(Integer, primary_key=True, index=True)
     project = Column(String(255), nullable=False, index=True)
@@ -19,5 +19,4 @@ class Client(Base):
     editor = Column(Integer)
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    ref_id_type = relationship('RefUserIdType', backref='tbl_client')
-    # ref_user = relationship('User', backref='tbl_client')
+    ref_id_type = relationship('RefUserIdType', backref='tbl_project')

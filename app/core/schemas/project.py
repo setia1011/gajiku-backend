@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class Client(BaseModel):
+class Project(BaseModel):
     id: Optional[int]
     project: Optional[str]
     address: Optional[str]

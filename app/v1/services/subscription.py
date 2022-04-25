@@ -15,8 +15,8 @@ def list_plan(db: Session = Depends):
     return dt_subscription_plan
 
 
-def subscribe(client_id: int, db: Session = Depends):
-    dt_subscribe = db.query(Subscription).filter(Subscription.client_id == client_id).filter(Subscription.status == "pending").all()
+def subscribe(project_id: int, db: Session = Depends):
+    dt_subscribe = db.query(Subscription).filter(Subscription.project_id == project_id).filter(Subscription.status == "pending").all()
     return dt_subscribe
 
 
@@ -27,7 +27,7 @@ def subscribe_plan(
         subs_end: datetime.datetime,
         subs_price: float,
         token: str,
-        client_id: int,
+        project_id: int,
         creator: int,
         db: Session = Depends):
     dt_subscription_plan = Subscription(
@@ -37,6 +37,6 @@ def subscribe_plan(
         subs_end=subs_end,
         subs_price=subs_price,
         token=token,
-        client_id=client_id,
+        project_id=project_id,
         creator=creator)
     return dt_subscription_plan

@@ -9,5 +9,3 @@ class RefUserIdType(Base):
     id = Column(Integer, primary_key=True, index=True)
     id_type = Column(String(50), unique=True, nullable=False, index=True)
     id_description = Column(String(225))
-
-    # ref_user = relationship('User', backref='ref_user_id_type')

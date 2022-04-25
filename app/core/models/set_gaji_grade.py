@@ -8,12 +8,17 @@ class SetGajiGrade(Base):
     __tablename__ = "set_gaji_grade"
 
     id = Column(Integer, primary_key=True, index=True)
-    kode = Column(String(50), nullable=False, index=True)
+    grade = Column(String(50), nullable=False, index=True)
+
+    besaran = Column(Float, index=True)
+    jenis_besaran = Column(Enum("persentase", "spesifik"), nullable=False, index=True)
+    dasar_penetapan = Column(String(500))
+    mulai_berlaku = Column(DateTime(timezone=True))
+    selesai_berlaku = Column(DateTime(timezone=True))
     keterangan = Column(String(500), index=True)
-    client_id = Column(Integer, ForeignKey("tbl_client.id"), nullable=False, index=True)
+    status = Column(Enum("berlaku", "tidak berlaku"), nullable=False, server_default="berlaku", index=True)
+
     creator = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     editor = Column(Integer)
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-
-    ref_client = relationship("Client", backref="set_gaji_grade")

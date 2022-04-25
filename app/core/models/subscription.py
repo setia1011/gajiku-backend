@@ -15,7 +15,7 @@ class Subscription(Base):
     subs_end = Column(DateTime(timezone=True), nullable=False, index=True)
 
     token = Column(String(255), unique=True, nullable=False)
-    client_id = Column(Integer, ForeignKey("tbl_client.id"), nullable=False, index=True)
+    project_id = Column(Integer, ForeignKey("tbl_project.id"), nullable=False, index=True)
     status = Column(Enum("pending","active","expired"), server_default="pending", nullable=False, index=True)
 
     creator = Column(Integer, nullable=False, index=True)
@@ -24,4 +24,4 @@ class Subscription(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), index=True)
 
     ref_subscription_plan = relationship('SubscriptionPlan', backref='tbl_subscription')
-    ref_client = relationship("Client", backref="tbl_subscription")
+    ref_project = relationship("Project", backref="tbl_subscription")
