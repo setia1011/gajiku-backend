@@ -26,8 +26,6 @@ async def pangkat(
             golongan=schema.golongan,
             pangkat=schema.pangkat,
             ruang=schema.ruang,
-            besaran=schema.besaran,
-            jenis_besaran=schema.jenis_besaran,
             keterangan=schema.keterangan,
             db=db
         )
@@ -40,7 +38,6 @@ async def pangkat(
         raise
     finally:
         db.close()
-
 
 
 @router.post("/jabatan/")

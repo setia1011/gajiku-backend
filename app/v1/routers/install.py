@@ -1,11 +1,13 @@
 import pandas as pd
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 from app.core.database import db_session
 from app.core.utils.auth import get_password_hash
 from app.core.config import settings
 from app.core.schemas import responses as schema_responses
 from app.v1.services import install as service_reference
+from app.v1.services import master as service_master
 
 
 router = APIRouter()
@@ -78,5 +80,27 @@ async def db_initial(db: Session = Depends(db_session)):
         db.commit()
         db.refresh(_subscription_plan)
 
+    data = {"data": "Install data berhasil"}
+    return data
+
+
+@router.post("/set-gaji-initial", response_model=schema_responses.Simple)
+def set_gaji_initial(db: Session = Depends(db_session)):
+    # Insert pangkat
+    pangkat = settings.CORE_PATH + "/data/pangkat.csv"
+    df_pangkat = pd.read_csv(pangkat, usecols=["pangkat","golongan","ruang"])
+    for i, val in df_pangkat.iterrows():
+        dt = service_master.find_pangkat(golongan=val['golongan'], ruang=val['ruang'], pangkat=val['pangkat'], db=db)
+        if dt:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data pangkat sudah ada di sistem")
+        dt_pangkat = service_reference.create_pangkat(
+            pangkat=val['pangkat'],
+            golongan=val['golongan'],
+            ruang=val['ruang'],
+            db=db)
+        dt_pangkat.creator = 1
+        db.add(dt_pangkat)
+        db.commit()
+        db.refresh(dt_pangkat)
     data = {"data": "Install data berhasil"}
     return data

@@ -1,6 +1,6 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from app.core.models import RefGroup, RefIdType, User, SubscriptionPlan, RefProvinsi
+from app.core.models import RefGroup, RefIdType, User, SubscriptionPlan, RefProvinsi, SetGajiPangkat
 
 
 def create_provinsi(
@@ -52,3 +52,12 @@ def create_subscription_plan(
     plan: str, monthly_price: str, status: str, creator: int, db: Session = Depends):
     dt_subscription_plan = SubscriptionPlan(plan=plan, monthly_price=monthly_price, status=status, creator=creator)
     return dt_subscription_plan
+
+
+def create_pangkat(
+        pangkat: str,
+        golongan: str,
+        ruang: str,
+        db: Session = Depends):
+    dt_pangkat = SetGajiPangkat(pangkat=pangkat, golongan=golongan, ruang=ruang)
+    return dt_pangkat

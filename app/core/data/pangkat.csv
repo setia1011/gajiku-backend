@@ -1,5 +1,17 @@
 pangkat,golongan,ruang
-juru muda,1,a
-juru muda tingkat 1,1,b
-juru,1,c
-juru tingkat 1,1,d
+Juru Muda,I,a
+Juru Muda Tingkat I,I,b
+Juru,I,c
+Juru Tingkat I,I,d
+Pengatur Muda,II,a
+Pengatur Muda Tingkat I,II,b
+Pengatur,II,c
+Pengatur Tingkat I,II,d
+Penata Muda,III,a
+Penata Muda Tingkat I,III,b
+Penata,III,c
+Peningkat Tingkat I,III,d
+Pembina,IV,a
+Pembina Tingkat I,IV,b
+Pembina Utama Muda,IV,c
+Pembina Utama Madya,IV,d

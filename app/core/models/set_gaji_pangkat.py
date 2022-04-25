@@ -17,7 +17,7 @@ class SetGajiPangkat(Base):
     # dasar_penetapan = Column(String(500))
     # mulai_berlaku = Column(DateTime(timezone=True))
     # selesai_berlaku = Column(DateTime(timezone=True))
-    # keterangan = Column(String(500), index=True)
+    keterangan = Column(String(500), index=True)
     # status = Column(Enum("berlaku", "tidak berlaku"), nullable=False, server_default="berlaku", index=True)
 
     creator = Column(Integer, nullable=False)

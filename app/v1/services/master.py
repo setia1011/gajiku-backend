@@ -7,16 +7,12 @@ def create_pangkat(
         golongan: str,
         ruang: str,
         pangkat: str,
-        besaran: str,
-        jenis_besaran: str,
         keterangan: str,
         db: Session = Depends):
     dt_pangkat = SetGajiPangkat(
         golongan=golongan,
         ruang=ruang,
         pangkat=pangkat,
-        besaran=besaran,
-        jenis_besaran=jenis_besaran,
         keterangan=keterangan)
     return dt_pangkat
 
