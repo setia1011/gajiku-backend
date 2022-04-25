@@ -15,3 +15,4 @@ from app.core.models.set_gaji_perjadin import SetGajiPerjadin
 from app.core.models.ref_provinsi import RefProvinsi
 from app.core.models.set_gaji_berkala import SetGajiBerkala
 from app.core.models.set_gaji_project import SetGajiProject
+from app.core.models.set_gaji import SetGaji

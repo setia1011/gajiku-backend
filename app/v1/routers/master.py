@@ -3,28 +3,44 @@ from sqlalchemy.orm import Session
 from app.core.database import db_session
 from app.core.utils.auth import get_password_hash
 from app.core.config import settings
-from app.core.utils.auth import get_current_active_user
+from app.core.models.user import User
 from app.v1.services import master as service_master
 from app.core.schemas import master as schema_master
+from app.core.utils import auth
 
 
 router = APIRouter()
 
 
-@router.post("/golongan/", response_model=schema_master.Golongan)
-async def golongan(schema: schema_master.GolonganIn, db: Session = Depends(db_session)):
-    dt_golongan = service_master.create_golongan(
-        golongan=schema.golongan,
-        pangkat=schema.pangkat,
-        ruang=schema.ruang,
-        keterangan=schema.keterangan,
-        project_id=schema.project_id,
-        db=db
-    )
-    db.add(dt_golongan)
-    db.commit()
-    data = db.refresh(dt_golongan)
-    return data
+@router.post("/pangkat/", response_model=schema_master.Pangkat, dependencies=[Depends(auth.default)])
+async def pangkat(
+        schema: schema_master.PangkatIn,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
+    try:
+        dt = service_master.find_pangkat(golongan=schema.golongan, ruang=schema.ruang, pangkat=schema.pangkat, db=db)
+        if dt:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data pangkat sudah ada di sistem")
+
+        dt_pangkat = service_master.create_pangkat(
+            golongan=schema.golongan,
+            pangkat=schema.pangkat,
+            ruang=schema.ruang,
+            besaran=schema.besaran,
+            jenis_besaran=schema.jenis_besaran,
+            keterangan=schema.keterangan,
+            db=db
+        )
+        dt_pangkat.creator = current_user.id
+        db.add(dt_pangkat)
+        db.commit()
+        db.refresh(dt_pangkat)
+        return dt_pangkat
+    except Exception:
+        raise
+    finally:
+        db.close()
+
 
 
 @router.post("/jabatan/")

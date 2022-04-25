@@ -3,13 +3,18 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class Golongan(BaseModel):
+class Pangkat(BaseModel):
     id: Optional[int]
+    pangkat: Optional[str]
     golongan: Optional[str]
     ruang: Optional[str]
-    pangkat: Optional[str]
+    besaran: Optional[float]
+    jenis_besaran: Optional[str]
+    dasar_penetapan: Optional[str]
+    mulai_berlaku: Optional[str]
+    selesai_berlaku: Optional[str]
     keterangan: Optional[str]
-    project_id: Optional[int]
+    status: Optional[str]
     creator: Optional[int]
     created_at: Optional[datetime.datetime]
     editor: Optional[int]
@@ -19,12 +24,13 @@ class Golongan(BaseModel):
         orm_mode = True
 
 
-class GolonganIn(BaseModel):
+class PangkatIn(BaseModel):
     golongan: str
     ruang: str
     pangkat: str
+    besaran: float
+    jenis_besaran: str
     keterangan: Optional[str]
-    project_id: int
 
     class Config:
         orm_mode = True
