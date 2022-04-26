@@ -102,5 +102,20 @@ def set_gaji_initial(db: Session = Depends(db_session)):
         db.add(dt_pangkat)
         db.commit()
         db.refresh(dt_pangkat)
+
+    # Insert data kawin dan ptkp
+    kawin = settings.CORE_PATH + "/data/kawin.csv"
+    df_kawin = pd.read_csv(kawin, usecols=["keterangan", "kode", "ptkp"])
+    for i, val in df_kawin.iterrows():
+        dt_kawin = service_master.create_kawin(
+            kode=val['kode'],
+            keterangan=val['keterangan'],
+            ptkp=val['ptkp'],
+            db=db)
+        dt_kawin.creator = 1
+        db.add(dt_kawin)
+        db.commit()
+        db.refresh(dt_kawin)
+
     data = {"data": "Install data berhasil"}
     return data

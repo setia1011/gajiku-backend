@@ -11,8 +11,10 @@ class SetGajiKawin(Base):
     kode = Column(String(50), nullable=False, index=True)
     keterangan = Column(String(500), index=True)
 
-    besaran = Column(Float, index=True)
-    jenis_besaran = Column(Enum("persentase", "spesifik"), nullable=False, index=True)
+    tunjangan_is = Column(Float, nullable=False, default=5, index=True)
+    tunjangan_anak = Column(Float, nullable=False, default=2, index=True)
+    tunjangan_beras = Column(Float, nullable=False, default=149000, index=True)
+    ptkp = Column(Float, index=True)
     dasar_penetapan = Column(String(500))
     mulai_berlaku = Column(DateTime(timezone=True))
     selesai_berlaku = Column(DateTime(timezone=True))

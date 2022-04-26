@@ -45,6 +45,7 @@ async def jabatan(schema: schema_master.JabatanIn, current_user: User = Depends(
     try:
         dt_jabatan = service_master.create_jabatan(
             kategori=schema.kategori,
+            kode=schema.kode,
             jabatan=schema.jabatan,
             besaran=schema.besaran,
             jenis_besaran=schema.jenis_besaran,
@@ -63,6 +64,21 @@ async def jabatan(schema: schema_master.JabatanIn, current_user: User = Depends(
     return {}
 
 
+@router.post("/status-kawin/", response_model=schema_master.Kawin, dependencies=[Depends(auth.client)])
+async def status_kawin(schema: schema_master.KawinIn, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
+    dt_kawin = service_master.create_kawin(kode=schema.kode, keterangan=schema.keterangan, ptkp=schema.ptkp, db=db)
+    dt_kawin.creator = current_user.id
+    db.add(dt_kawin)
+    db.commit()
+    db.refresh(dt_kawin)
+    return dt_kawin
+
+
+@router.post("/perjadin/")
+async def perjadin():
+    return {}
+
+
 @router.post("/grade/")
 async def grade():
     return {}
@@ -73,21 +89,3 @@ async def bpjs():
     return {}
 
 
-@router.post("/status-kawin/")
-async def status_kawin():
-    return {}
-
-
-@router.post("/perjadin/")
-async def perjadin():
-    return {}
-
-
-@router.post("/penghasilan/")
-async def penghasilan():
-    return {}
-
-
-@router.post("/potongan/")
-async def potongan():
-    return {}

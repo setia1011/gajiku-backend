@@ -1,0 +1,13 @@
+keterangan,kode,ptkp
+tidak kawin tidak ada tanggungan,tk0,54000000
+tidak kawin tanggungan 1,tk1,58500000
+tidak kawin tanggungan 2,tk2,63000000
+tidak kawin tanggungan 3,tk3,67500000
+kawin tidak ada tanggungan,k0,58500000
+kawin tanggungan 1,k1,63000000
+kawin tanggungan 2,k2,67500000
+kawin tanggungan 3,k3,72000000
+kawin digabung tidak ada tanggungan,ki0,112500000
+kawin digabung tanggungan 1,ki1,117000000
+kawin digabung tanggungan 2,ki2,121500000
+kawin digabung tanggungan 3,ki3,126000000
