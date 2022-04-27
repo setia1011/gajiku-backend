@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: b31074b6992e
+Revision ID: 5bb9d5e30fc9
 Revises: 
-Create Date: 2022-04-25 11:46:43.963753
+Create Date: 2022-04-26 10:29:33.596060
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b31074b6992e'
+revision = '5bb9d5e30fc9'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -41,129 +41,6 @@ def upgrade():
     )
     op.create_index(op.f('ix_ref_provinsi_id'), 'ref_provinsi', ['id'], unique=False)
     op.create_index(op.f('ix_ref_provinsi_provinsi'), 'ref_provinsi', ['provinsi'], unique=False)
-    op.create_table('set_gaji_berkala',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('besaran', sa.Float(), nullable=True),
-    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
-    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
-    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('keterangan', sa.String(length=500), nullable=True),
-    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_berkala_besaran'), 'set_gaji_berkala', ['besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_berkala_id'), 'set_gaji_berkala', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_berkala_jenis_besaran'), 'set_gaji_berkala', ['jenis_besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_berkala_keterangan'), 'set_gaji_berkala', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_berkala_status'), 'set_gaji_berkala', ['status'], unique=False)
-    op.create_table('set_gaji_bpjs',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('kode', sa.String(length=50), nullable=False),
-    sa.Column('besaran', sa.Float(), nullable=True),
-    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
-    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
-    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('keterangan', sa.String(length=500), nullable=True),
-    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_bpjs_besaran'), 'set_gaji_bpjs', ['besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_bpjs_id'), 'set_gaji_bpjs', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_bpjs_jenis_besaran'), 'set_gaji_bpjs', ['jenis_besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_bpjs_keterangan'), 'set_gaji_bpjs', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_bpjs_kode'), 'set_gaji_bpjs', ['kode'], unique=False)
-    op.create_index(op.f('ix_set_gaji_bpjs_status'), 'set_gaji_bpjs', ['status'], unique=False)
-    op.create_table('set_gaji_grade',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('grade', sa.String(length=50), nullable=False),
-    sa.Column('besaran', sa.Float(), nullable=True),
-    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
-    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
-    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('keterangan', sa.String(length=500), nullable=True),
-    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_grade_besaran'), 'set_gaji_grade', ['besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_grade_grade'), 'set_gaji_grade', ['grade'], unique=False)
-    op.create_index(op.f('ix_set_gaji_grade_id'), 'set_gaji_grade', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_grade_jenis_besaran'), 'set_gaji_grade', ['jenis_besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_grade_keterangan'), 'set_gaji_grade', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_grade_status'), 'set_gaji_grade', ['status'], unique=False)
-    op.create_table('set_gaji_jabatan',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('kategori', sa.Enum('struktural', 'fungsional'), server_default='struktural', nullable=False),
-    sa.Column('besaran', sa.Float(), nullable=True),
-    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
-    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
-    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('keterangan', sa.String(length=500), nullable=True),
-    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_jabatan_besaran'), 'set_gaji_jabatan', ['besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_jabatan_id'), 'set_gaji_jabatan', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_jabatan_jenis_besaran'), 'set_gaji_jabatan', ['jenis_besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_jabatan_kategori'), 'set_gaji_jabatan', ['kategori'], unique=False)
-    op.create_index(op.f('ix_set_gaji_jabatan_keterangan'), 'set_gaji_jabatan', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_jabatan_status'), 'set_gaji_jabatan', ['status'], unique=False)
-    op.create_table('set_gaji_kawin',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('kode', sa.String(length=50), nullable=False),
-    sa.Column('keterangan', sa.String(length=500), nullable=True),
-    sa.Column('besaran', sa.Float(), nullable=True),
-    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
-    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
-    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_kawin_besaran'), 'set_gaji_kawin', ['besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_kawin_id'), 'set_gaji_kawin', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_kawin_jenis_besaran'), 'set_gaji_kawin', ['jenis_besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_kawin_keterangan'), 'set_gaji_kawin', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_kawin_kode'), 'set_gaji_kawin', ['kode'], unique=False)
-    op.create_index(op.f('ix_set_gaji_kawin_status'), 'set_gaji_kawin', ['status'], unique=False)
-    op.create_table('set_gaji_pangkat',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('pangkat', sa.String(length=50), nullable=True),
-    sa.Column('golongan', sa.String(length=50), nullable=True),
-    sa.Column('ruang', sa.String(length=50), nullable=True),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_pangkat_golongan'), 'set_gaji_pangkat', ['golongan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_pangkat_id'), 'set_gaji_pangkat', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_pangkat_pangkat'), 'set_gaji_pangkat', ['pangkat'], unique=False)
-    op.create_index(op.f('ix_set_gaji_pangkat_ruang'), 'set_gaji_pangkat', ['ruang'], unique=False)
     op.create_table('tbl_subscription_plan',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('plan', sa.Enum('basic', 'standard', 'premium'), nullable=True),
@@ -182,30 +59,6 @@ def upgrade():
     op.create_index(op.f('ix_tbl_subscription_plan_monthly_price'), 'tbl_subscription_plan', ['monthly_price'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_plan_plan'), 'tbl_subscription_plan', ['plan'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_plan_updated_at'), 'tbl_subscription_plan', ['updated_at'], unique=False)
-    op.create_table('set_gaji_perjadin',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('pangkat_id', sa.Integer(), nullable=False),
-    sa.Column('provinsi_id', sa.Integer(), nullable=False),
-    sa.Column('besaran', sa.Float(), nullable=True),
-    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
-    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
-    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['pangkat_id'], ['set_gaji_pangkat.id'], ),
-    sa.ForeignKeyConstraint(['provinsi_id'], ['ref_provinsi.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_perjadin_besaran'), 'set_gaji_perjadin', ['besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_perjadin_id'), 'set_gaji_perjadin', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_perjadin_jenis_besaran'), 'set_gaji_perjadin', ['jenis_besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_perjadin_pangkat_id'), 'set_gaji_perjadin', ['pangkat_id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_perjadin_provinsi_id'), 'set_gaji_perjadin', ['provinsi_id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_perjadin_status'), 'set_gaji_perjadin', ['status'], unique=False)
     op.create_table('tbl_user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=255), nullable=False),
@@ -268,10 +121,120 @@ def upgrade():
     op.create_index(op.f('ix_tbl_project_responsible_id_number'), 'tbl_project', ['responsible_id_number'], unique=False)
     op.create_index(op.f('ix_tbl_project_responsible_id_type'), 'tbl_project', ['responsible_id_type'], unique=False)
     op.create_index(op.f('ix_tbl_project_user_id'), 'tbl_project', ['user_id'], unique=False)
-    op.create_table('set_gaji_project',
+    op.create_table('set_gaji_bpjs',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('set', sa.String(length=50), nullable=False),
-    sa.Column('set_id', sa.String(length=500), nullable=True),
+    sa.Column('kode', sa.String(length=50), nullable=False),
+    sa.Column('besaran', sa.Float(), nullable=True),
+    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
+    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
+    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('keterangan', sa.String(length=500), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_set_gaji_bpjs_besaran'), 'set_gaji_bpjs', ['besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_bpjs_id'), 'set_gaji_bpjs', ['id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_bpjs_jenis_besaran'), 'set_gaji_bpjs', ['jenis_besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_bpjs_keterangan'), 'set_gaji_bpjs', ['keterangan'], unique=False)
+    op.create_index(op.f('ix_set_gaji_bpjs_kode'), 'set_gaji_bpjs', ['kode'], unique=False)
+    op.create_index(op.f('ix_set_gaji_bpjs_project_id'), 'set_gaji_bpjs', ['project_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_bpjs_status'), 'set_gaji_bpjs', ['status'], unique=False)
+    op.create_table('set_gaji_grade',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('grade', sa.String(length=50), nullable=False),
+    sa.Column('besaran', sa.Float(), nullable=True),
+    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
+    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
+    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('keterangan', sa.String(length=500), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_set_gaji_grade_besaran'), 'set_gaji_grade', ['besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_grade_grade'), 'set_gaji_grade', ['grade'], unique=False)
+    op.create_index(op.f('ix_set_gaji_grade_id'), 'set_gaji_grade', ['id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_grade_jenis_besaran'), 'set_gaji_grade', ['jenis_besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_grade_keterangan'), 'set_gaji_grade', ['keterangan'], unique=False)
+    op.create_index(op.f('ix_set_gaji_grade_project_id'), 'set_gaji_grade', ['project_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_grade_status'), 'set_gaji_grade', ['status'], unique=False)
+    op.create_table('set_gaji_jabatan',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('kode', sa.String(length=50), nullable=False),
+    sa.Column('kategori', sa.Enum('struktural', 'fungsional'), server_default='struktural', nullable=False),
+    sa.Column('jabatan', sa.String(length=100), nullable=False),
+    sa.Column('besaran', sa.Float(), nullable=True),
+    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
+    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
+    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('keterangan', sa.String(length=500), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_set_gaji_jabatan_besaran'), 'set_gaji_jabatan', ['besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_jabatan_id'), 'set_gaji_jabatan', ['id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_jabatan_jabatan'), 'set_gaji_jabatan', ['jabatan'], unique=False)
+    op.create_index(op.f('ix_set_gaji_jabatan_jenis_besaran'), 'set_gaji_jabatan', ['jenis_besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_jabatan_kategori'), 'set_gaji_jabatan', ['kategori'], unique=False)
+    op.create_index(op.f('ix_set_gaji_jabatan_keterangan'), 'set_gaji_jabatan', ['keterangan'], unique=False)
+    op.create_index(op.f('ix_set_gaji_jabatan_kode'), 'set_gaji_jabatan', ['kode'], unique=False)
+    op.create_index(op.f('ix_set_gaji_jabatan_project_id'), 'set_gaji_jabatan', ['project_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_jabatan_status'), 'set_gaji_jabatan', ['status'], unique=False)
+    op.create_table('set_gaji_kawin',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('kode', sa.String(length=50), nullable=False),
+    sa.Column('keterangan', sa.String(length=500), nullable=True),
+    sa.Column('tunjangan_is', sa.Float(), nullable=False),
+    sa.Column('tunjangan_anak', sa.Float(), nullable=False),
+    sa.Column('tunjangan_beras', sa.Float(), nullable=False),
+    sa.Column('ptkp', sa.Float(), nullable=True),
+    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
+    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_set_gaji_kawin_id'), 'set_gaji_kawin', ['id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_kawin_keterangan'), 'set_gaji_kawin', ['keterangan'], unique=False)
+    op.create_index(op.f('ix_set_gaji_kawin_kode'), 'set_gaji_kawin', ['kode'], unique=False)
+    op.create_index(op.f('ix_set_gaji_kawin_project_id'), 'set_gaji_kawin', ['project_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_kawin_ptkp'), 'set_gaji_kawin', ['ptkp'], unique=False)
+    op.create_index(op.f('ix_set_gaji_kawin_status'), 'set_gaji_kawin', ['status'], unique=False)
+    op.create_index(op.f('ix_set_gaji_kawin_tunjangan_anak'), 'set_gaji_kawin', ['tunjangan_anak'], unique=False)
+    op.create_index(op.f('ix_set_gaji_kawin_tunjangan_beras'), 'set_gaji_kawin', ['tunjangan_beras'], unique=False)
+    op.create_index(op.f('ix_set_gaji_kawin_tunjangan_is'), 'set_gaji_kawin', ['tunjangan_is'], unique=False)
+    op.create_table('set_gaji_pangkat',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('pangkat', sa.String(length=50), nullable=True),
+    sa.Column('golongan', sa.String(length=50), nullable=True),
+    sa.Column('ruang', sa.String(length=50), nullable=True),
+    sa.Column('keterangan', sa.String(length=500), nullable=True),
     sa.Column('project_id', sa.Integer(), nullable=False),
     sa.Column('creator', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
@@ -280,10 +243,96 @@ def upgrade():
     sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_set_gaji_project_id'), 'set_gaji_project', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_project_project_id'), 'set_gaji_project', ['project_id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_project_set'), 'set_gaji_project', ['set'], unique=False)
-    op.create_index(op.f('ix_set_gaji_project_set_id'), 'set_gaji_project', ['set_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_pangkat_golongan'), 'set_gaji_pangkat', ['golongan'], unique=False)
+    op.create_index(op.f('ix_set_gaji_pangkat_id'), 'set_gaji_pangkat', ['id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_pangkat_keterangan'), 'set_gaji_pangkat', ['keterangan'], unique=False)
+    op.create_index(op.f('ix_set_gaji_pangkat_pangkat'), 'set_gaji_pangkat', ['pangkat'], unique=False)
+    op.create_index(op.f('ix_set_gaji_pangkat_project_id'), 'set_gaji_pangkat', ['project_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_pangkat_ruang'), 'set_gaji_pangkat', ['ruang'], unique=False)
+    op.create_table('tbl_subscription',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('subs_plan_id', sa.Integer(), nullable=False),
+    sa.Column('subs_month', sa.Integer(), nullable=False),
+    sa.Column('subs_price', sa.Float(), nullable=False),
+    sa.Column('subs_start', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('subs_end', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('token', sa.String(length=255), nullable=False),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('pending', 'active', 'expired'), server_default='pending', nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
+    sa.ForeignKeyConstraint(['subs_plan_id'], ['tbl_subscription_plan.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('token')
+    )
+    op.create_index(op.f('ix_tbl_subscription_created_at'), 'tbl_subscription', ['created_at'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_creator'), 'tbl_subscription', ['creator'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_editor'), 'tbl_subscription', ['editor'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_id'), 'tbl_subscription', ['id'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_project_id'), 'tbl_subscription', ['project_id'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_status'), 'tbl_subscription', ['status'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_end'), 'tbl_subscription', ['subs_end'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_month'), 'tbl_subscription', ['subs_month'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_plan_id'), 'tbl_subscription', ['subs_plan_id'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_price'), 'tbl_subscription', ['subs_price'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_subs_start'), 'tbl_subscription', ['subs_start'], unique=False)
+    op.create_index(op.f('ix_tbl_subscription_updated_at'), 'tbl_subscription', ['updated_at'], unique=False)
+    op.create_table('set_gaji',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('pangkat_id', sa.Integer(), nullable=False),
+    sa.Column('masa_kerja', sa.Integer(), nullable=False),
+    sa.Column('pokok', sa.Float(), nullable=True),
+    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
+    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('keterangan', sa.String(length=500), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['pangkat_id'], ['set_gaji_pangkat.id'], ),
+    sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_set_gaji_id'), 'set_gaji', ['id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_keterangan'), 'set_gaji', ['keterangan'], unique=False)
+    op.create_index(op.f('ix_set_gaji_masa_kerja'), 'set_gaji', ['masa_kerja'], unique=False)
+    op.create_index(op.f('ix_set_gaji_pangkat_id'), 'set_gaji', ['pangkat_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_pokok'), 'set_gaji', ['pokok'], unique=False)
+    op.create_index(op.f('ix_set_gaji_project_id'), 'set_gaji', ['project_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_status'), 'set_gaji', ['status'], unique=False)
+    op.create_table('set_gaji_perjadin',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('pangkat_id', sa.Integer(), nullable=False),
+    sa.Column('provinsi_id', sa.Integer(), nullable=False),
+    sa.Column('besaran', sa.Float(), nullable=True),
+    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
+    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
+    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
+    sa.Column('creator', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('editor', sa.Integer(), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
+    sa.ForeignKeyConstraint(['pangkat_id'], ['set_gaji_pangkat.id'], ),
+    sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
+    sa.ForeignKeyConstraint(['provinsi_id'], ['ref_provinsi.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_set_gaji_perjadin_besaran'), 'set_gaji_perjadin', ['besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_perjadin_id'), 'set_gaji_perjadin', ['id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_perjadin_jenis_besaran'), 'set_gaji_perjadin', ['jenis_besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_perjadin_pangkat_id'), 'set_gaji_perjadin', ['pangkat_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_perjadin_project_id'), 'set_gaji_perjadin', ['project_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_perjadin_provinsi_id'), 'set_gaji_perjadin', ['provinsi_id'], unique=False)
+    op.create_index(op.f('ix_set_gaji_perjadin_status'), 'set_gaji_perjadin', ['status'], unique=False)
     op.create_table('tbl_employee',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=200), nullable=False),
@@ -321,74 +370,39 @@ def upgrade():
     op.create_index(op.f('ix_tbl_employee_project_id'), 'tbl_employee', ['project_id'], unique=False)
     op.create_index(op.f('ix_tbl_employee_status_bekerja'), 'tbl_employee', ['status_bekerja'], unique=False)
     op.create_index(op.f('ix_tbl_employee_status_kawin'), 'tbl_employee', ['status_kawin'], unique=False)
-    op.create_table('tbl_subscription',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('subs_plan_id', sa.Integer(), nullable=False),
-    sa.Column('subs_month', sa.Integer(), nullable=False),
-    sa.Column('subs_price', sa.Float(), nullable=False),
-    sa.Column('subs_start', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('subs_end', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('token', sa.String(length=255), nullable=False),
-    sa.Column('project_id', sa.Integer(), nullable=False),
-    sa.Column('status', sa.Enum('pending', 'active', 'expired'), server_default='pending', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
-    sa.ForeignKeyConstraint(['subs_plan_id'], ['tbl_subscription_plan.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('token')
-    )
-    op.create_index(op.f('ix_tbl_subscription_created_at'), 'tbl_subscription', ['created_at'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_creator'), 'tbl_subscription', ['creator'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_editor'), 'tbl_subscription', ['editor'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_id'), 'tbl_subscription', ['id'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_project_id'), 'tbl_subscription', ['project_id'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_status'), 'tbl_subscription', ['status'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_end'), 'tbl_subscription', ['subs_end'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_month'), 'tbl_subscription', ['subs_month'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_plan_id'), 'tbl_subscription', ['subs_plan_id'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_price'), 'tbl_subscription', ['subs_price'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_subs_start'), 'tbl_subscription', ['subs_start'], unique=False)
-    op.create_index(op.f('ix_tbl_subscription_updated_at'), 'tbl_subscription', ['updated_at'], unique=False)
-    op.create_table('set_gaji',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('pangkat_id', sa.Integer(), nullable=False),
-    sa.Column('masa_kerja', sa.Integer(), nullable=False),
-    sa.Column('besaran', sa.Float(), nullable=True),
-    sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
-    sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
-    sa.Column('mulai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('selesai_berlaku', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('keterangan', sa.String(length=500), nullable=True),
-    sa.Column('status', sa.Enum('berlaku', 'tidak berlaku'), server_default='berlaku', nullable=False),
-    sa.Column('creator', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('editor', sa.Integer(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['pangkat_id'], ['set_gaji_project.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_set_gaji_besaran'), 'set_gaji', ['besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_id'), 'set_gaji', ['id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_jenis_besaran'), 'set_gaji', ['jenis_besaran'], unique=False)
-    op.create_index(op.f('ix_set_gaji_keterangan'), 'set_gaji', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_masa_kerja'), 'set_gaji', ['masa_kerja'], unique=False)
-    op.create_index(op.f('ix_set_gaji_pangkat_id'), 'set_gaji', ['pangkat_id'], unique=False)
-    op.create_index(op.f('ix_set_gaji_status'), 'set_gaji', ['status'], unique=False)
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_index(op.f('ix_tbl_employee_status_kawin'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_status_bekerja'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_project_id'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_pangkat_id'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_name'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_masa_kerja'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_jabatan_id'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_id_type'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_id_number'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_id'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_grade_id'), table_name='tbl_employee')
+    op.drop_index(op.f('ix_tbl_employee_bpjs_id'), table_name='tbl_employee')
+    op.drop_table('tbl_employee')
+    op.drop_index(op.f('ix_set_gaji_perjadin_status'), table_name='set_gaji_perjadin')
+    op.drop_index(op.f('ix_set_gaji_perjadin_provinsi_id'), table_name='set_gaji_perjadin')
+    op.drop_index(op.f('ix_set_gaji_perjadin_project_id'), table_name='set_gaji_perjadin')
+    op.drop_index(op.f('ix_set_gaji_perjadin_pangkat_id'), table_name='set_gaji_perjadin')
+    op.drop_index(op.f('ix_set_gaji_perjadin_jenis_besaran'), table_name='set_gaji_perjadin')
+    op.drop_index(op.f('ix_set_gaji_perjadin_id'), table_name='set_gaji_perjadin')
+    op.drop_index(op.f('ix_set_gaji_perjadin_besaran'), table_name='set_gaji_perjadin')
+    op.drop_table('set_gaji_perjadin')
     op.drop_index(op.f('ix_set_gaji_status'), table_name='set_gaji')
+    op.drop_index(op.f('ix_set_gaji_project_id'), table_name='set_gaji')
+    op.drop_index(op.f('ix_set_gaji_pokok'), table_name='set_gaji')
     op.drop_index(op.f('ix_set_gaji_pangkat_id'), table_name='set_gaji')
     op.drop_index(op.f('ix_set_gaji_masa_kerja'), table_name='set_gaji')
     op.drop_index(op.f('ix_set_gaji_keterangan'), table_name='set_gaji')
-    op.drop_index(op.f('ix_set_gaji_jenis_besaran'), table_name='set_gaji')
     op.drop_index(op.f('ix_set_gaji_id'), table_name='set_gaji')
-    op.drop_index(op.f('ix_set_gaji_besaran'), table_name='set_gaji')
     op.drop_table('set_gaji')
     op.drop_index(op.f('ix_tbl_subscription_updated_at'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_subs_start'), table_name='tbl_subscription')
@@ -403,24 +417,49 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_subscription_creator'), table_name='tbl_subscription')
     op.drop_index(op.f('ix_tbl_subscription_created_at'), table_name='tbl_subscription')
     op.drop_table('tbl_subscription')
-    op.drop_index(op.f('ix_tbl_employee_status_kawin'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_status_bekerja'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_project_id'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_pangkat_id'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_name'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_masa_kerja'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_jabatan_id'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_id_type'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_id_number'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_id'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_grade_id'), table_name='tbl_employee')
-    op.drop_index(op.f('ix_tbl_employee_bpjs_id'), table_name='tbl_employee')
-    op.drop_table('tbl_employee')
-    op.drop_index(op.f('ix_set_gaji_project_set_id'), table_name='set_gaji_project')
-    op.drop_index(op.f('ix_set_gaji_project_set'), table_name='set_gaji_project')
-    op.drop_index(op.f('ix_set_gaji_project_project_id'), table_name='set_gaji_project')
-    op.drop_index(op.f('ix_set_gaji_project_id'), table_name='set_gaji_project')
-    op.drop_table('set_gaji_project')
+    op.drop_index(op.f('ix_set_gaji_pangkat_ruang'), table_name='set_gaji_pangkat')
+    op.drop_index(op.f('ix_set_gaji_pangkat_project_id'), table_name='set_gaji_pangkat')
+    op.drop_index(op.f('ix_set_gaji_pangkat_pangkat'), table_name='set_gaji_pangkat')
+    op.drop_index(op.f('ix_set_gaji_pangkat_keterangan'), table_name='set_gaji_pangkat')
+    op.drop_index(op.f('ix_set_gaji_pangkat_id'), table_name='set_gaji_pangkat')
+    op.drop_index(op.f('ix_set_gaji_pangkat_golongan'), table_name='set_gaji_pangkat')
+    op.drop_table('set_gaji_pangkat')
+    op.drop_index(op.f('ix_set_gaji_kawin_tunjangan_is'), table_name='set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_kawin_tunjangan_beras'), table_name='set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_kawin_tunjangan_anak'), table_name='set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_kawin_status'), table_name='set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_kawin_ptkp'), table_name='set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_kawin_project_id'), table_name='set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_kawin_kode'), table_name='set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_kawin_keterangan'), table_name='set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_kawin_id'), table_name='set_gaji_kawin')
+    op.drop_table('set_gaji_kawin')
+    op.drop_index(op.f('ix_set_gaji_jabatan_status'), table_name='set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_jabatan_project_id'), table_name='set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_jabatan_kode'), table_name='set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_jabatan_keterangan'), table_name='set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_jabatan_kategori'), table_name='set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_jabatan_jenis_besaran'), table_name='set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_jabatan_jabatan'), table_name='set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_jabatan_id'), table_name='set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_jabatan_besaran'), table_name='set_gaji_jabatan')
+    op.drop_table('set_gaji_jabatan')
+    op.drop_index(op.f('ix_set_gaji_grade_status'), table_name='set_gaji_grade')
+    op.drop_index(op.f('ix_set_gaji_grade_project_id'), table_name='set_gaji_grade')
+    op.drop_index(op.f('ix_set_gaji_grade_keterangan'), table_name='set_gaji_grade')
+    op.drop_index(op.f('ix_set_gaji_grade_jenis_besaran'), table_name='set_gaji_grade')
+    op.drop_index(op.f('ix_set_gaji_grade_id'), table_name='set_gaji_grade')
+    op.drop_index(op.f('ix_set_gaji_grade_grade'), table_name='set_gaji_grade')
+    op.drop_index(op.f('ix_set_gaji_grade_besaran'), table_name='set_gaji_grade')
+    op.drop_table('set_gaji_grade')
+    op.drop_index(op.f('ix_set_gaji_bpjs_status'), table_name='set_gaji_bpjs')
+    op.drop_index(op.f('ix_set_gaji_bpjs_project_id'), table_name='set_gaji_bpjs')
+    op.drop_index(op.f('ix_set_gaji_bpjs_kode'), table_name='set_gaji_bpjs')
+    op.drop_index(op.f('ix_set_gaji_bpjs_keterangan'), table_name='set_gaji_bpjs')
+    op.drop_index(op.f('ix_set_gaji_bpjs_jenis_besaran'), table_name='set_gaji_bpjs')
+    op.drop_index(op.f('ix_set_gaji_bpjs_id'), table_name='set_gaji_bpjs')
+    op.drop_index(op.f('ix_set_gaji_bpjs_besaran'), table_name='set_gaji_bpjs')
+    op.drop_table('set_gaji_bpjs')
     op.drop_index(op.f('ix_tbl_project_user_id'), table_name='tbl_project')
     op.drop_index(op.f('ix_tbl_project_responsible_id_type'), table_name='tbl_project')
     op.drop_index(op.f('ix_tbl_project_responsible_id_number'), table_name='tbl_project')
@@ -439,13 +478,6 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_user_group_id'), table_name='tbl_user')
     op.drop_index(op.f('ix_tbl_user_email'), table_name='tbl_user')
     op.drop_table('tbl_user')
-    op.drop_index(op.f('ix_set_gaji_perjadin_status'), table_name='set_gaji_perjadin')
-    op.drop_index(op.f('ix_set_gaji_perjadin_provinsi_id'), table_name='set_gaji_perjadin')
-    op.drop_index(op.f('ix_set_gaji_perjadin_pangkat_id'), table_name='set_gaji_perjadin')
-    op.drop_index(op.f('ix_set_gaji_perjadin_jenis_besaran'), table_name='set_gaji_perjadin')
-    op.drop_index(op.f('ix_set_gaji_perjadin_id'), table_name='set_gaji_perjadin')
-    op.drop_index(op.f('ix_set_gaji_perjadin_besaran'), table_name='set_gaji_perjadin')
-    op.drop_table('set_gaji_perjadin')
     op.drop_index(op.f('ix_tbl_subscription_plan_updated_at'), table_name='tbl_subscription_plan')
     op.drop_index(op.f('ix_tbl_subscription_plan_plan'), table_name='tbl_subscription_plan')
     op.drop_index(op.f('ix_tbl_subscription_plan_monthly_price'), table_name='tbl_subscription_plan')
@@ -454,45 +486,6 @@ def downgrade():
     op.drop_index(op.f('ix_tbl_subscription_plan_creator'), table_name='tbl_subscription_plan')
     op.drop_index(op.f('ix_tbl_subscription_plan_created_at'), table_name='tbl_subscription_plan')
     op.drop_table('tbl_subscription_plan')
-    op.drop_index(op.f('ix_set_gaji_pangkat_ruang'), table_name='set_gaji_pangkat')
-    op.drop_index(op.f('ix_set_gaji_pangkat_pangkat'), table_name='set_gaji_pangkat')
-    op.drop_index(op.f('ix_set_gaji_pangkat_id'), table_name='set_gaji_pangkat')
-    op.drop_index(op.f('ix_set_gaji_pangkat_golongan'), table_name='set_gaji_pangkat')
-    op.drop_table('set_gaji_pangkat')
-    op.drop_index(op.f('ix_set_gaji_kawin_status'), table_name='set_gaji_kawin')
-    op.drop_index(op.f('ix_set_gaji_kawin_kode'), table_name='set_gaji_kawin')
-    op.drop_index(op.f('ix_set_gaji_kawin_keterangan'), table_name='set_gaji_kawin')
-    op.drop_index(op.f('ix_set_gaji_kawin_jenis_besaran'), table_name='set_gaji_kawin')
-    op.drop_index(op.f('ix_set_gaji_kawin_id'), table_name='set_gaji_kawin')
-    op.drop_index(op.f('ix_set_gaji_kawin_besaran'), table_name='set_gaji_kawin')
-    op.drop_table('set_gaji_kawin')
-    op.drop_index(op.f('ix_set_gaji_jabatan_status'), table_name='set_gaji_jabatan')
-    op.drop_index(op.f('ix_set_gaji_jabatan_keterangan'), table_name='set_gaji_jabatan')
-    op.drop_index(op.f('ix_set_gaji_jabatan_kategori'), table_name='set_gaji_jabatan')
-    op.drop_index(op.f('ix_set_gaji_jabatan_jenis_besaran'), table_name='set_gaji_jabatan')
-    op.drop_index(op.f('ix_set_gaji_jabatan_id'), table_name='set_gaji_jabatan')
-    op.drop_index(op.f('ix_set_gaji_jabatan_besaran'), table_name='set_gaji_jabatan')
-    op.drop_table('set_gaji_jabatan')
-    op.drop_index(op.f('ix_set_gaji_grade_status'), table_name='set_gaji_grade')
-    op.drop_index(op.f('ix_set_gaji_grade_keterangan'), table_name='set_gaji_grade')
-    op.drop_index(op.f('ix_set_gaji_grade_jenis_besaran'), table_name='set_gaji_grade')
-    op.drop_index(op.f('ix_set_gaji_grade_id'), table_name='set_gaji_grade')
-    op.drop_index(op.f('ix_set_gaji_grade_grade'), table_name='set_gaji_grade')
-    op.drop_index(op.f('ix_set_gaji_grade_besaran'), table_name='set_gaji_grade')
-    op.drop_table('set_gaji_grade')
-    op.drop_index(op.f('ix_set_gaji_bpjs_status'), table_name='set_gaji_bpjs')
-    op.drop_index(op.f('ix_set_gaji_bpjs_kode'), table_name='set_gaji_bpjs')
-    op.drop_index(op.f('ix_set_gaji_bpjs_keterangan'), table_name='set_gaji_bpjs')
-    op.drop_index(op.f('ix_set_gaji_bpjs_jenis_besaran'), table_name='set_gaji_bpjs')
-    op.drop_index(op.f('ix_set_gaji_bpjs_id'), table_name='set_gaji_bpjs')
-    op.drop_index(op.f('ix_set_gaji_bpjs_besaran'), table_name='set_gaji_bpjs')
-    op.drop_table('set_gaji_bpjs')
-    op.drop_index(op.f('ix_set_gaji_berkala_status'), table_name='set_gaji_berkala')
-    op.drop_index(op.f('ix_set_gaji_berkala_keterangan'), table_name='set_gaji_berkala')
-    op.drop_index(op.f('ix_set_gaji_berkala_jenis_besaran'), table_name='set_gaji_berkala')
-    op.drop_index(op.f('ix_set_gaji_berkala_id'), table_name='set_gaji_berkala')
-    op.drop_index(op.f('ix_set_gaji_berkala_besaran'), table_name='set_gaji_berkala')
-    op.drop_table('set_gaji_berkala')
     op.drop_index(op.f('ix_ref_provinsi_provinsi'), table_name='ref_provinsi')
     op.drop_index(op.f('ix_ref_provinsi_id'), table_name='ref_provinsi')
     op.drop_table('ref_provinsi')

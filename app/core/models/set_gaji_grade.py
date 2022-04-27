@@ -16,6 +16,7 @@ class SetGajiGrade(Base):
     mulai_berlaku = Column(DateTime(timezone=True))
     selesai_berlaku = Column(DateTime(timezone=True))
     keterangan = Column(String(500), index=True)
+    project_id = Column(Integer, ForeignKey("tbl_project.id"), nullable=False, index=True)
     status = Column(Enum("berlaku", "tidak berlaku"), nullable=False, server_default="berlaku", index=True)
 
     creator = Column(Integer, nullable=False)

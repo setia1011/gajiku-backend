@@ -9,6 +9,7 @@ class Pangkat(BaseModel):
     golongan: Optional[str]
     ruang: Optional[str]
     keterangan: Optional[str]
+    project_id: Optional[int]
     creator: Optional[int]
     created_at: Optional[datetime.datetime]
     editor: Optional[int]
@@ -19,9 +20,10 @@ class Pangkat(BaseModel):
 
 
 class PangkatIn(BaseModel):
+    pangkat: str
     golongan: str
     ruang: str
-    pangkat: str
+    project_id: int
     keterangan: Optional[str]
 
     class Config:
@@ -39,6 +41,7 @@ class Jabatan(BaseModel):
     mulai_berlaku: Optional[str]
     selesai_berlaku: Optional[str]
     keterangan: Optional[str]
+    project_id: Optional[int]
     status: Optional[str]
     creator: Optional[int]
     created_at: Optional[datetime.datetime]
@@ -55,6 +58,7 @@ class JabatanIn(BaseModel):
     jabatan: str
     besaran: float
     jenis_besaran: str
+    project_id: int
     keterangan: Optional[str]
 
     class Config:
@@ -74,6 +78,7 @@ class Kawin(BaseModel):
     mulai_berlaku: Optional[str]
     selesai_berlaku: Optional[str]
 
+    project_id: Optional[int]
     status: Optional[str]
     creator: Optional[int]
     created_at: Optional[datetime.datetime]
@@ -88,6 +93,66 @@ class KawinIn(BaseModel):
     kode: str
     keterangan: Optional[str]
     ptkp: float
+    project_id: int
 
     class Config:
         orm_mode = True
+
+
+# class Gaji(BaseModel):
+#     id: Optional[int]
+#     pangkat_id: Optional[int]
+#     masa_kerja: Optional[int]
+#     pokok: Optional[float]
+#     dasar_penetapan: Optional[str]
+#     mulai_berlaku: Optional[str]
+#     selesai_berlaku: Optional[str]
+#     keterangan: Optional[str]
+#     project_id: Optional[int]
+#     status: Optional[str]
+#     creator: Optional[int]
+#     created_at: Optional[datetime.datetime]
+#     editor: Optional[int]
+#     updated_at: Optional[datetime.datetime]
+#
+#     class Config:
+#         orm_mode = True
+#
+#
+# class GajiIn(BaseModel):
+#     pangkat_id: int
+#     masa_kerja: int
+#     pokok: float
+#     project_id: int
+#
+#     class Config:
+#         orm_mode = True
+
+
+class Gaji(BaseModel):
+    name: Optional[str]
+    gaji_pokok: Optional[float]
+    tunjangan_istri: Optional[float]
+    tunjangan_anak: Optional[float]
+    tunjangan_beras: Optional[float]
+    tunjangan_daerah: Optional[float]
+    tunjangan_terpencil: Optional[float]
+    tunjangan_jabatan_struktural: Optional[float]
+    tunjangan_jabatan_fungsional: Optional[float]
+
+    class Config:
+        orm_mode = True
+
+
+class GajiIn(BaseModel):
+    name: str
+    jabatan: Optional[str]
+    project_id: int
+    pangkat: str
+    masa_kerja: int
+    status_kawin: str
+
+    class Config:
+        orm_mode = True
+
+

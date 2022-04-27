@@ -16,6 +16,7 @@ class SetGajiPerjadin(Base):
     dasar_penetapan = Column(String(500))
     mulai_berlaku = Column(DateTime(timezone=True))
     selesai_berlaku = Column(DateTime(timezone=True))
+    project_id = Column(Integer, ForeignKey("tbl_project.id"), nullable=False, index=True)
     status = Column(Enum("berlaku", "tidak berlaku"), nullable=False, server_default="berlaku", index=True)
     creator = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

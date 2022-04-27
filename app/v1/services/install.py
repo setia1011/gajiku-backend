@@ -58,6 +58,7 @@ def create_pangkat(
         pangkat: str,
         golongan: str,
         ruang: str,
+        project_id: int,
         db: Session = Depends):
-    dt_pangkat = SetGajiPangkat(pangkat=pangkat, golongan=golongan, ruang=ruang)
+    dt_pangkat = SetGajiPangkat(pangkat=pangkat, golongan=golongan, ruang=ruang, project_id=project_id)
     return dt_pangkat
