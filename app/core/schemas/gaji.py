@@ -130,7 +130,6 @@ class KawinIn(BaseModel):
 
 
 class Gaji(BaseModel):
-    name: Optional[str]
     gaji_pokok: Optional[float]
     tunjangan_istri: Optional[float]
     tunjangan_anak: Optional[float]
@@ -139,13 +138,38 @@ class Gaji(BaseModel):
     tunjangan_terpencil: Optional[float]
     tunjangan_jabatan_struktural: Optional[float]
     tunjangan_jabatan_fungsional: Optional[float]
+    tunjangan_khusus_pajak: Optional[float]
+    total: Optional[float]
 
     class Config:
         orm_mode = True
 
 
+class Potongan(BaseModel):
+    taspen: Optional[float]
+    bpjs: Optional[float]
+    sewa_rumah: Optional[float]
+    pph_21: Optional[float]
+    kelebihan_gaji: Optional[float]
+    total: Optional[float]
+
+    class Config:
+        orm_mode = True
+
+
+
+class GajiOut(BaseModel):
+    id: Optional[str]
+    periode: Optional[str]
+    gaji: Optional[Gaji]
+    potongan: Optional[Potongan]
+    netto: Optional[float]
+
+
 class GajiIn(BaseModel):
-    name: str
+    id: str
+    bulan: int
+    tahun: int
     jabatan: Optional[str]
     project_id: int
     pangkat: str
@@ -154,5 +178,15 @@ class GajiIn(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+# class Potongan(BaseModel):
+#     pph_21: Optional[float]
+#
+#     class Config:
+#         orm_mode = True
+#
+#
+# class PotonganIn(BaseModel):
 
 

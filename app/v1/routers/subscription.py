@@ -10,9 +10,9 @@ from app.v1.services import subscription as serv_subs
 router = APIRouter()
 
 
-@router.post("/plan/", status_code=status.HTTP_200_OK)
-async def plan():
-    return {}
+# @router.post("/plan/", status_code=status.HTTP_200_OK)
+# async def plan():
+#     return {}
 
 
 @router.get("/plan/{subs_plan_id}", response_model=sch_subs.SubscribeOut)
@@ -27,11 +27,11 @@ async def list_plan(db: Session = Depends(db_session)):
     return dt_subscription_plan
 
 
-@router.put("/upgrade-plan/")
-async def upgrade_plan():
-    return {"data": "Upgrade subscription plan"}
-
-
-@router.post("/cancel-plan/")
-async def cancel_plan():
-    return {"data": "Cancel subscription plan"}
+# @router.put("/update-plan/")
+# async def update_plan():
+#     return {"data": "Update subscription plan"}
+#
+#
+# @router.post("/cancel-plan/")
+# async def cancel_plan():
+#     return {"data": "Cancel subscription plan"}
