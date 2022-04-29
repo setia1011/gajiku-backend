@@ -149,6 +149,7 @@ class Potongan(BaseModel):
     taspen: Optional[float]
     bpjs: Optional[float]
     sewa_rumah: Optional[float]
+    biaya_jabatan: Optional[float]
     pph_21: Optional[float]
     kelebihan_gaji: Optional[float]
     total: Optional[float]
@@ -175,6 +176,7 @@ class GajiIn(BaseModel):
     pangkat: str
     masa_kerja: int
     status_kawin: str
+    bpjs: str
 
     class Config:
         orm_mode = True

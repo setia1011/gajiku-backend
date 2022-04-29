@@ -11,7 +11,7 @@ class SetGajiKawin(Base):
     kode = Column(String(50), nullable=False, index=True)
     keterangan = Column(String(500), index=True)
 
-    tunjangan_is = Column(Float, nullable=False, default=5, index=True)
+    tunjangan_is = Column(Float, nullable=False, default=10, index=True)
     tunjangan_anak = Column(Float, nullable=False, default=2, index=True)
     tunjangan_beras = Column(Float, nullable=False, default=149000, index=True)
     ptkp = Column(Float, index=True)

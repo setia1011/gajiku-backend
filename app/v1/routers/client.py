@@ -129,7 +129,7 @@ async def subscribe_plan(
         db.close()
 
 
-@router.post("/billing-confirmation/")
-async def billing_confirmation():
-    return {}
+# @router.post("/billing-confirmation/")
+# async def billing_confirmation():
+#     return {}
 

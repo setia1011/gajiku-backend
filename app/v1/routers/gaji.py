@@ -117,5 +117,6 @@ async def rincian_gaji(gaji: schema_gaji.GajiIn, db: Session = Depends(db_sessio
         pangkat=gaji.pangkat,
         masa_kerja=gaji.masa_kerja,
         status_kawin=gaji.status_kawin,
+        bpjs=gaji.bpjs,
         db=db)
     return dt

@@ -75,17 +75,21 @@ def rincian_gaji(
         masa_kerja: int,
         status_kawin: str,
         jabatan: str,
+        bpjs: str,
         db: Session = Depends):
     a = models.SetGaji
     b = models.SetGajiPangkat
     c = models.SetGajiKawin
     d = models.SetGajiJabatan
+    e = models.SetGajiBpjs
 
-    pokok = db.query(a.pokok).filter(a.pangkat_id == b.id).where(
+    pokok = db.query(a.pokok, b.golongan).filter(a.pangkat_id == b.id).where(
         (a.project_id == project_id) & (a.masa_kerja == masa_kerja) & (b.pangkat == pangkat)).first()
-    kawin = db.query(c.tunjangan_is, c.tunjangan_anak, c.tunjangan_beras).where(
+    kawin = db.query(c.tunjangan_is, c.tunjangan_anak, c.tunjangan_beras, c.ptkp).where(
         (c.project_id == project_id) & (c.kode == status_kawin)).first()
     jabatan = db.query(d.besaran, d.kategori).where((d.kode == jabatan) & (d.project_id == project_id)).first()
+    iuran_bpjs = db.query(e.besaran).where((e.kelas==bpjs) & (e.project_id==project_id)).first()
+
 
     gaji = {}
     if pokok:
@@ -111,11 +115,45 @@ def rincian_gaji(
     gaji['total'] = sum([x for x in gaji.values() if x is not None])
 
     potongan = {}
-    potongan['taspen'] = 229310
-    potongan['bpjs'] = 70000
+    potongan['taspen'] = round((4.75 / 100) * (gaji['gaji_pokok'] + gaji['tunjangan_istri'] + gaji['tunjangan_anak']), 0)
+    potongan['bpjs'] = iuran_bpjs[0]
     potongan['pph_21'] = None
+
+    # Biaya Jabatan
+    if (5/100) * gaji['total'] > 500000:
+        potongan['biaya_jabatan'] = 500000
+    else:
+        potongan['biaya_jabatan'] = round((5/100) * gaji['total'])
+
     potongan['total'] = sum([x for x in potongan.values() if x is not None])
 
-    netto = gaji['total'] + potongan['total']
+    # Netto
+    netto = round(gaji['total'] + potongan['total'], -3)
 
-    return {"id": id, "periode": periode, "gaji": gaji, "potongan": potongan, "netto": netto}
+    # PKP Setahun
+    if (netto * 12) - kawin[3] > 0:
+        pkp = (netto * 12) - kawin[3]
+    else:
+        pkp = 0.0
+
+    # PPh Pasal 21
+    if 0.0 <= pkp <= 50000000:
+        potongan['pph_21'] = (pkp * (5/100)) / 12
+    elif 50000000 < pkp <= 250000000:
+        potongan['pph_21'] = (pkp * (15/100)) / 12
+    elif 250000000 < pkp <= 500000000:
+        potongan['pph_21'] = (pkp * (25 / 100)) / 12
+    else:
+        potongan['pph_21'] = (pkp * (30 / 100)) / 12
+
+    # Convert to null
+    if potongan['pph_21'] == 0.0 or pokok[1] == 'I' or pokok[1] == 'II':
+        potongan['pph_21'] = None
+
+    return {
+        "id": id,
+        "periode": periode,
+        "gaji": gaji,
+        "potongan": potongan,
+        "netto": netto
+    }

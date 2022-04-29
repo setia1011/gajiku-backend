@@ -8,7 +8,7 @@ class SetGajiBpjs(Base):
     __tablename__ = "set_gaji_bpjs"
 
     id = Column(Integer, primary_key=True, index=True)
-    kode = Column(String(50), nullable=False, index=True)
+    kelas = Column(String(50), nullable=False, index=True)
 
     besaran = Column(Float, index=True)
     jenis_besaran = Column(Enum("persentase", "spesifik"), nullable=False, index=True)
