@@ -105,7 +105,6 @@ def set_initial_gaji_project_1(db: Session = Depends(db_session)):
         db.commit()
         db.refresh(dt_pangkat)
 
-
     # Insert data kawin dan ptkp
     kawin = settings.CORE_PATH + "/data/kawin.csv"
     df_kawin = pd.read_csv(kawin, usecols=["keterangan", "kode", "ptkp"])

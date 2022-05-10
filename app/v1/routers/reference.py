@@ -69,3 +69,9 @@ async def id_type(
 async def list_id_type(db: Session = Depends(db_session)):
     dt_ref_id_type = service_reference.list_id_type(db=db)
     return dt_ref_id_type
+
+
+@router.get("/id-type/{s}", response_model=list[schema_reference.RefIdType])
+async def find_id_type(s=str, db: Session = Depends(db_session)):
+    dt = service_reference.find_id_type(s=s, db=db)
+    return dt

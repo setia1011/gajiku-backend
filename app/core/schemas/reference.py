@@ -50,6 +50,14 @@ class UserIdType(BaseModel):
         }
 
 
+class UserIdTypeIn(BaseModel):
+    s: str
+
+    class Config:
+        orm_mode = True
+
+
+
 class CreateUser(BaseModel):
     name: str
     username: str
