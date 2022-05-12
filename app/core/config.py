@@ -11,6 +11,8 @@ class Settings(BaseSettings):
 
     SMTP_USERNAME: str
     SMTP_PASSWORD: str
+    SMTP_HOST: str
+    SMTP_PORT: int
 
     JWT_SECRET: str
     JWT_ALGORITHM: str

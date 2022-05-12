@@ -1,5 +1,4 @@
 import smtplib, ssl
-import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from app.core.config import settings
@@ -40,7 +39,7 @@ def send(email, name, code, expired):
 
         # Create secure connection with server and send email
         context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        with smtplib.SMTP_SSL(settings.SMTP_HOST, settings.SMTP_PORT, context=context) as server:
             server.login(sender_email, password_email)
             server.sendmail(
                 sender_email, receiver_email, message.as_string()
