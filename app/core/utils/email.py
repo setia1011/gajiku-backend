@@ -47,4 +47,4 @@ def send(email, name, code, expired):
             server.quit()
     except smtplib.SMTPResponseException as e:
         print(e.smtp_error)
-        print("Sending to: " + sender_email + " failed!")
+        print("Sending to: " + receiver_email + " failed!")

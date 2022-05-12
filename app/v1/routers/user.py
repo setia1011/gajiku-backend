@@ -62,7 +62,7 @@ async def register(
         db.add(dt_activation)
         if dt_activation:
             # Send acticode to register email
-            email.send(
+            await email.send(
                 email=user.email,
                 name=user.name,
                 code=acticodex,
