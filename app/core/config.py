@@ -6,16 +6,16 @@ from pydantic import AnyHttpUrl, BaseSettings, validator
 class Settings(BaseSettings):
     CORE_PATH = os.path.abspath(os.path.dirname(__file__))
 
-    PROJECT_NAME: str
+    PROJECT_NAME: str = None
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
-    SMTP_USERNAME: str
-    SMTP_PASSWORD: str
-    SMTP_HOST: str
-    SMTP_PORT: int
+    SMTP_USERNAME: str = None
+    SMTP_PASSWORD: str = None
+    SMTP_HOST: str = None
+    SMTP_PORT: int = None
 
-    JWT_SECRET: str
-    JWT_ALGORITHM: str
+    JWT_SECRET: str = None
+    JWT_ALGORITHM: str = None
 
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
@@ -28,11 +28,11 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    MYSQL_USER: str
-    MYSQL_PASSWORD: str
-    MYSQL_HOST: str
-    MYSQL_PORT: str
-    MYSQL_DATABASE: str
+    MYSQL_USER: str = None
+    MYSQL_PASSWORD: str = None
+    MYSQL_HOST: str = None
+    MYSQL_PORT: str = None
+    MYSQL_DATABASE: str = None
     DATABASE_URI: Optional[str] = None
 
     @validator("DATABASE_URI", pre=True)
