@@ -158,9 +158,12 @@ class Potongan(BaseModel):
         orm_mode = True
 
 
-
 class GajiOut(BaseModel):
     id: Optional[str]
+    pangkat: Optional[str]
+    golongan: Optional[str]
+    ruang: Optional[str]
+    masa_kerja: Optional[int]
     periode: Optional[str]
     gaji: Optional[Gaji]
     potongan: Optional[Potongan]

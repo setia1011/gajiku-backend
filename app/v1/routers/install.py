@@ -121,7 +121,7 @@ def set_initial_gaji_project_1(db: Session = Depends(db_session)):
         db.refresh(dt_kawin)
 
     # Insert data gaji pokok
-    gaji = settings.CORE_PATH + "/data/gaji.csv"
+    gaji = settings.CORE_PATH + "/data/gaji2.csv"
     df_gaji = pd.read_csv(gaji, usecols=["pangkat", "masa_kerja", "pokok"])
     for i, val in df_gaji.iterrows():
         dt_gaji = service_master.create_gaji(

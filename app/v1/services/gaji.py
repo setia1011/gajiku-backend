@@ -83,7 +83,7 @@ def rincian_gaji(
     d = models.SetGajiJabatan
     e = models.SetGajiBpjs
 
-    pokok = db.query(a.pokok, b.golongan).filter(a.pangkat_id == b.id).where(
+    pokok = db.query(a.pokok, b.golongan, b.pangkat, b.ruang).filter(a.pangkat_id == b.id).where(
         (a.project_id == project_id) & (a.masa_kerja == masa_kerja) & (b.pangkat == pangkat)).first()
     kawin = db.query(c.tunjangan_is, c.tunjangan_anak, c.tunjangan_beras, c.ptkp).where(
         (c.project_id == project_id) & (c.kode == status_kawin)).first()
@@ -116,7 +116,10 @@ def rincian_gaji(
 
     potongan = {}
     potongan['taspen'] = round((4.75 / 100) * (gaji['gaji_pokok'] + gaji['tunjangan_istri'] + gaji['tunjangan_anak']), 0)
-    potongan['bpjs'] = iuran_bpjs[0]
+    if iuran_bpjs:
+        potongan['bpjs'] = iuran_bpjs[0]
+    else:
+        potongan['bpjs'] = None
     potongan['pph_21'] = None
 
     # Biaya Jabatan
@@ -153,6 +156,10 @@ def rincian_gaji(
     return {
         "id": id,
         "periode": periode,
+        "pangkat": pokok[2],
+        "golongan": pokok[1],
+        "ruang": pokok[3],
+        "masa_kerja": masa_kerja,
         "gaji": gaji,
         "potongan": potongan,
         "netto": netto

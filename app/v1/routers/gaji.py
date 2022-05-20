@@ -101,13 +101,13 @@ async def rincian_gaji(gaji: schema_gaji.GajiIn, db: Session = Depends(db_sessio
     #         pangkat=gaji.pangkat,
     #         masa_kerja=gaji.masa_kerja,
     #         status_kawin=gaji.status_kawin,
+    #         bpjs=gaji.bpjs,
     #         db=db)
     #     return dt
     # except Exception:
     #     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Terjadi kesalahan")
     # finally:
     #     db.close()
-
     dt = service_gaji.rincian_gaji(
         id=gaji.id,
         bulan=gaji.bulan,
