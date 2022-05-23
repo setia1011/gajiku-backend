@@ -91,32 +91,20 @@ async def status_kawin(schema: schema_gaji.KawinIn, current_user: User = Depends
 
 @router.post("/rincian-gaji", response_model=schema_gaji.GajiOut)
 async def rincian_gaji(gaji: schema_gaji.GajiIn, db: Session = Depends(db_session)):
-    # try:
-    #     dt = service_gaji.rincian_gaji(
-    #         id=gaji.id,
-    #         bulan=gaji.bulan,
-    #         tahun=gaji.tahun,
-    #         jabatan=gaji.jabatan,
-    #         project_id=gaji.project_id,
-    #         pangkat=gaji.pangkat,
-    #         masa_kerja=gaji.masa_kerja,
-    #         status_kawin=gaji.status_kawin,
-    #         bpjs=gaji.bpjs,
-    #         db=db)
-    #     return dt
-    # except Exception:
-    #     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Terjadi kesalahan")
-    # finally:
-    #     db.close()
-    dt = service_gaji.rincian_gaji(
-        id=gaji.id,
-        bulan=gaji.bulan,
-        tahun=gaji.tahun,
-        jabatan=gaji.jabatan,
-        project_id=gaji.project_id,
-        pangkat=gaji.pangkat,
-        masa_kerja=gaji.masa_kerja,
-        status_kawin=gaji.status_kawin,
-        bpjs=gaji.bpjs,
-        db=db)
-    return dt
+    try:
+        dt = service_gaji.rincian_gaji(
+            id=gaji.id,
+            bulan=gaji.bulan,
+            tahun=gaji.tahun,
+            jabatan=gaji.jabatan,
+            project_id=gaji.project_id,
+            pangkat=gaji.pangkat,
+            masa_kerja=gaji.masa_kerja,
+            status_kawin=gaji.status_kawin,
+            bpjs=gaji.bpjs,
+            db=db)
+        return dt
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Terjadi kesalahan")
+    finally:
+        db.close()

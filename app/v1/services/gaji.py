@@ -39,7 +39,7 @@ def create_jabatan(
         kategori: str,
         kode: str,
         jabatan: str,
-        besaran: str,
+        besaran: float,
         jenis_besaran: str,
         keterangan: str,
         project_id: int,
