@@ -65,6 +65,14 @@ class JabatanIn(BaseModel):
         orm_mode = True
 
 
+class CariJabatanIn(BaseModel):
+    jabatan: str
+    project_id: int
+
+    class Config:
+        orm_mode = True
+
+
 class Kawin(BaseModel):
     id: Optional[int]
     kode: Optional[str]

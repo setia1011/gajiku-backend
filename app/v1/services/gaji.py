@@ -56,6 +56,11 @@ def find_jabatan(kode: str, project_id: int, db: Session = Depends):
     return dt_jabatan
 
 
+def find_jabatan_like(jabatan:str, project_id:int, db: Session=Depends):
+    dt_jabatan = db.query(models.SetGajiJabatan).filter(models.SetGajiJabatan.project_id==project_id).filter(models.SetGajiJabatan.jabatan.like('%{0}%'.format(jabatan))).all()
+    return dt_jabatan
+
+
 def create_kawin(kode: str, keterangan: str, ptkp: float, project_id: int, db: Session = Depends):
     dt_kawin = models.SetGajiKawin(kode=kode, keterangan=keterangan, ptkp=ptkp, project_id=project_id)
     return dt_kawin

@@ -39,6 +39,21 @@ async def pangkat(
         db.close()
 
 
+@router.post("/cari-jabatan/", response_model=list[schema_gaji.Jabatan], dependencies=[Depends(auth.client)])
+async def cari_jabatan(schema: schema_gaji.CariJabatanIn, db: Session=Depends(db_session)):
+    try:
+        if len(schema.jabatan) < 4:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Pencarian kurang dari 4 karakter huruf")
+
+        dt_jabatan = service_gaji.find_jabatan_like(jabatan=schema.jabatan, project_id=schema.project_id, db=db)
+        return dt_jabatan
+    except Exception:
+        raise
+    finally:
+        db.close()
+
+
 @router.post("/jabatan/", response_model=schema_gaji.Jabatan, dependencies=[Depends(auth.client)])
 async def jabatan(schema: schema_gaji.JabatanIn, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
     try:
