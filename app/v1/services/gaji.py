@@ -50,8 +50,8 @@ def create_jabatan(
     return dt_jabatan
 
 
-def find_jabatan(jabatan: str, project_id: int, db: Session = Depends):
-    dt_jabatan = db.query(models.SetGajiJabatan).filter(models.SetGajiJabatan.jabatan == jabatan).filter(
+def find_jabatan(kode: str, project_id: int, db: Session = Depends):
+    dt_jabatan = db.query(models.SetGajiJabatan).filter(models.SetGajiJabatan.kode == kode).filter(
         models.SetGajiJabatan.project_id == project_id).all()
     return dt_jabatan
 

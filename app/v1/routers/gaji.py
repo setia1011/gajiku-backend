@@ -42,6 +42,10 @@ async def pangkat(
 @router.post("/jabatan/", response_model=schema_gaji.Jabatan, dependencies=[Depends(auth.client)])
 async def jabatan(schema: schema_gaji.JabatanIn, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
     try:
+        dt = service_gaji.find_jabatan(kode=schema.kode, project_id=schema.project_id, db=db)
+        if dt:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data jabatan sudah ada di sistem")
+
         dt_jabatan = service_gaji.create_jabatan(
             kategori=schema.kategori,
             kode=schema.kode,
