@@ -20,3 +20,4 @@ class Project(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     ref_id_type = relationship('RefIdType', backref='tbl_project')
+    ref_subscription = relationship('Subscription', backref='tbl_project')

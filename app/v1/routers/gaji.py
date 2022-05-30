@@ -6,7 +6,6 @@ from app.v1.services import gaji as service_gaji
 from app.core.schemas import gaji as schema_gaji
 from app.core.utils import auth
 
-
 router = APIRouter()
 
 
@@ -16,7 +15,8 @@ async def pangkat(
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
     try:
-        dt = service_gaji.find_pangkat(golongan=schema.golongan, ruang=schema.ruang, pangkat=schema.pangkat, project_id=schema.project_id, db=db)
+        dt = service_gaji.find_pangkat(golongan=schema.golongan, ruang=schema.ruang, pangkat=schema.pangkat,
+                                       project_id=schema.project_id, db=db)
         if dt:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data pangkat sudah ada di sistem")
 
@@ -39,23 +39,9 @@ async def pangkat(
         db.close()
 
 
-@router.post("/cari-jabatan/", response_model=list[schema_gaji.Jabatan], dependencies=[Depends(auth.client)])
-async def cari_jabatan(schema: schema_gaji.CariJabatanIn, db: Session=Depends(db_session)):
-    try:
-        if len(schema.jabatan) < 4:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                                detail="Pencarian kurang dari 4 karakter huruf")
-
-        dt_jabatan = service_gaji.find_jabatan_like(jabatan=schema.jabatan, project_id=schema.project_id, db=db)
-        return dt_jabatan
-    except Exception:
-        raise
-    finally:
-        db.close()
-
-
 @router.post("/jabatan/", response_model=schema_gaji.Jabatan, dependencies=[Depends(auth.client)])
-async def jabatan(schema: schema_gaji.JabatanIn, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
+async def jabatan(schema: schema_gaji.JabatanIn, current_user: User = Depends(auth.get_current_active_user),
+                  db: Session = Depends(db_session)):
     try:
         dt = service_gaji.find_jabatan(kode=schema.kode, project_id=schema.project_id, db=db)
         if dt:
@@ -83,9 +69,25 @@ async def jabatan(schema: schema_gaji.JabatanIn, current_user: User = Depends(au
     return {}
 
 
+@router.post("/cari-jabatan/", response_model=list[schema_gaji.Jabatan], dependencies=[Depends(auth.client)])
+async def cari_jabatan(schema: schema_gaji.CariJabatanIn, db: Session = Depends(db_session)):
+    try:
+        if len(schema.jabatan) < 4:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Pencarian kurang dari 4 karakter huruf")
+        dt_jabatan = service_gaji.find_jabatan_like(jabatan=schema.jabatan, project_id=schema.project_id, db=db)
+        return dt_jabatan
+    except Exception:
+        raise
+    finally:
+        db.close()
+
+
 @router.post("/status-kawin/", response_model=schema_gaji.Kawin, dependencies=[Depends(auth.client)])
-async def status_kawin(schema: schema_gaji.KawinIn, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
-    dt_kawin = service_gaji.create_kawin(kode=schema.kode, keterangan=schema.keterangan, ptkp=schema.ptkp, project_id=schema.project_id, db=db)
+async def status_kawin(schema: schema_gaji.KawinIn, current_user: User = Depends(auth.get_current_active_user),
+                       db: Session = Depends(db_session)):
+    dt_kawin = service_gaji.create_kawin(kode=schema.kode, keterangan=schema.keterangan, ptkp=schema.ptkp,
+                                         project_id=schema.project_id, db=db)
     dt_kawin.creator = current_user.id
     db.add(dt_kawin)
     db.commit()

@@ -65,13 +65,31 @@ async def list_project(current_user: User = Depends(auth.get_current_active_user
     return dt_project
 
 
-@router.post("/project-detail/", response_model=schema_project.Project, status_code=status.HTTP_200_OK)
-async def project_detail(
+@router.post("/project-details/", response_model=schema_project.Project, status_code=status.HTTP_200_OK)
+async def project_details(
         project: schema_project.ProjectDetail,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
-    dt_project = service_project.project_detail(user_id=current_user.id, project_id=project.id, db=db)
+    dt_project = service_project.project_detail(user_id=current_user.id, project_id=project.project_id, db=db)
     return dt_project
+
+
+@router.post('/project-details-v2/', response_model=schema_project.ProjectDetailsOutV2, status_code=status.HTTP_200_OK)
+async def project_details_v2(
+        project: schema_project.ProjectDetail,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
+    dt_project = service_project.project_details_v2(user_id=current_user.id, project_id=project.project_id, db=db)
+    return dt_project
+
+
+@router.post('/subscription-details/', response_model=schema_project.SubscriptionDetailsOut, status_code=status.HTTP_200_OK)
+async def subscription_details(
+        subscribe: schema_project.SubscriptionDetails,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
+    dt_subscription = service_project.subscription_details(user_id=current_user.id, subs_id=subscribe.subscription_id, db=db)
+    return dt_subscription
 
 
 @router.post("/subscribe-plan/", response_model=sch_subs.Subscription)
