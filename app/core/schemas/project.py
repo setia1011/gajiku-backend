@@ -90,13 +90,13 @@ class ProjectDetailsOut(Project):
         orm_mode = True
 
 
-class Subscription2(Subscription):
+class RefSubscriptionPlan(Subscription):
     ref_subscription_plan: Optional[SubscriptionPlan]
 
 
 class ProjectDetailsOutV2(Project):
     ref_id_type: Optional[UserIdType]
-    ref_subscription: Optional[list[Subscription2]]
+    ref_subscription: Optional[list[RefSubscriptionPlan]]
 
     class Config:
         orm_mode = True

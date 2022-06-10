@@ -173,8 +173,13 @@ async def extend_subscription(
     if not subs_active:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tidak ditemukan data project aktif")
 
+    # Cek subscribe pending
+    subs_pending = serv_subs.subscribe_pending(project_id=subs.project_id, db=db)
+    if subs_pending:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Anda masih mempunyai project dengan status pending")
+
     # Cek plan yang minta available di dalam tabel subscribe_plan
-    subscription_plan = serv_subs.plan(subs_plan_id=subs.project_id, db=db)
+    subscription_plan = serv_subs.plan(subs_plan_id=subs.subs_plan_id, db=db)
     if not subscription_plan:
         raise HTTPException(
             detail="Data subscription plan tidak valid",
@@ -192,13 +197,11 @@ async def extend_subscription(
     subs_price = subscription_plan.monthly_price * subs.subs_month
     ppn = subs_price * 10 / 100
     total_subs_price = subs_price + ppn
-    token = useful.random_string(16)
 
     dt_subs_extend = serv_subs.subscribe_plan(
         subs_plan_id=subs.subs_plan_id,
         subs_month=subs.subs_month,
         subs_price=total_subs_price,
-        token=subs_active[0].token,
         project_id=project.id,
         creator=current_user.id,
         db=db)
