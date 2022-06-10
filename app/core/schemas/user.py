@@ -115,6 +115,7 @@ class UserIdType(BaseModel):
 class UserProject(BaseModel):
     id: Optional[int]
     project: Optional[str]
+    token: Optional[str]
     address: Optional[str]
     responsible_name: Optional[str]
     responsible_id_type: Optional[int]

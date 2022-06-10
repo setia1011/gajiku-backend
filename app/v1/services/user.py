@@ -16,6 +16,7 @@ def create_user(
 
 def register_project(
         project: str,
+        token: str,
         address: str,
         responsible_name: str,
         responsible_id_type: int,
@@ -25,6 +26,7 @@ def register_project(
         db: Session = Depends):
     dt_project = Project(
         project=project,
+        token=token,
         address=address,
         responsible_name=responsible_name,
         responsible_id_type=responsible_id_type,

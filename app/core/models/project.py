@@ -9,6 +9,7 @@ class Project(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     project = Column(String(255), nullable=False, index=True)
+    token = Column(String(255), unique=True, nullable=False)
     address = Column(TEXT)
     responsible_name = Column(String(50), nullable=False)
     responsible_id_type = Column(Integer, ForeignKey('ref_id_type.id'), nullable=False, index=True)

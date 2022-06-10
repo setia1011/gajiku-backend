@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 7a45a33c74dd
+Revision ID: b29550497df3
 Revises: 
-Create Date: 2022-06-10 10:53:35.645388
+Create Date: 2022-06-10 14:45:32.406590
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7a45a33c74dd'
+revision = 'b29550497df3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -103,6 +103,7 @@ def upgrade():
     op.create_table('tbl_project',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('project', sa.String(length=255), nullable=False),
+    sa.Column('token', sa.String(length=255), nullable=False),
     sa.Column('address', sa.TEXT(), nullable=True),
     sa.Column('responsible_name', sa.String(length=50), nullable=False),
     sa.Column('responsible_id_type', sa.Integer(), nullable=False),
@@ -114,7 +115,8 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['responsible_id_type'], ['ref_id_type.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['tbl_user.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('token')
     )
     op.create_index(op.f('ix_tbl_project_id'), 'tbl_project', ['id'], unique=False)
     op.create_index(op.f('ix_tbl_project_project'), 'tbl_project', ['project'], unique=False)
@@ -256,7 +258,6 @@ def upgrade():
     sa.Column('subs_price', sa.Float(), nullable=False),
     sa.Column('subs_start', sa.DateTime(timezone=True), nullable=True),
     sa.Column('subs_end', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('token', sa.String(length=255), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=False),
     sa.Column('status', sa.Enum('pending', 'active', 'expired', 'canceled'), server_default='pending', nullable=False),
     sa.Column('creator', sa.Integer(), nullable=False),
@@ -265,8 +266,7 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['tbl_project.id'], ),
     sa.ForeignKeyConstraint(['subs_plan_id'], ['tbl_subscription_plan.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('token')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tbl_subscription_created_at'), 'tbl_subscription', ['created_at'], unique=False)
     op.create_index(op.f('ix_tbl_subscription_creator'), 'tbl_subscription', ['creator'], unique=False)

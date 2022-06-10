@@ -14,7 +14,6 @@ class Subscription(Base):
     subs_start = Column(DateTime(timezone=True), index=True)
     subs_end = Column(DateTime(timezone=True), index=True)
 
-    token = Column(String(255), unique=True, nullable=False)
     project_id = Column(Integer, ForeignKey("tbl_project.id"), nullable=False, index=True)
     status = Column(Enum("pending","active","expired","canceled"), server_default="pending", nullable=False, index=True)
 

@@ -54,8 +54,9 @@ def update_project(
 
 
 def extend_subscription(
+        project_id: int,
         subs_month: int,
         subs_plan_id: int,
         db: Session = Depends):
-    dt_subscription = Project(id=subs_plan_id, subs_month=subs_month)
+    dt_subscription = Project(id=project_id, subs_plan_id=subs_plan_id, subs_month=subs_month)
     return dt_subscription
