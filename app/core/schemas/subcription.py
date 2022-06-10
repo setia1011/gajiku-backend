@@ -60,7 +60,18 @@ class SubscriptionPlan(BaseModel):
     monthy_price: Optional[float]
 
 
-# class SubscribePlanOut(User):
+class SubscribePlanUpgrade(BaseModel):
+    subs_plan_id: int
+    project_id: int
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "subs_plan_id": 2,
+                "project_id": 1
+            }
+        }
 
 
 

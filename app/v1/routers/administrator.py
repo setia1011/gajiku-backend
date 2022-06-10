@@ -101,3 +101,37 @@ async def activate_subscription(
         raise
     finally:
         db.close()
+
+
+@router.put("/activate-ext-subscription/", response_model=schema_responses.Simple, dependencies=[Depends(auth.admin)], status_code=status.HTTP_200_OK)
+async def activate_ext_subscription(
+        subs: schema_administrator.ActivateSubscription,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
+    try:
+        dt_subs = service_administrator.find_subscription_by_id(subs_id=subs.subs_id, db=db)
+        if not dt_subs:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Data subscription tidak valid"
+            )
+
+        if dt_subs.status == 'pending':
+            dt_subs.status = 'active'
+            dt_subs.editor = current_user.id
+            db.add(dt_subs)
+            db.commit()
+            db.refresh(dt_subs)
+            if dt_subs.status == 'active':
+                data = {"data": "Subcription berhasil diaktifkan"}
+            else:
+                data = {"data": "Terjadi kesalahan di sistem"}
+        elif dt_subs.status == "active":
+            data = {"data": "Subscription sudah pernah diaktifkan sebelumnya"}
+        else:
+            data = {"data": "Status subscription expired"}
+        return data
+    except Exception:
+        raise
+    finally:
+        db.close()

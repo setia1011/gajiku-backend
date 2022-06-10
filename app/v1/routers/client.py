@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import db_session
@@ -11,12 +13,14 @@ from app.core.schemas import subcription as sch_subs
 from app.v1.services import subscription as serv_subs
 from dateutil.relativedelta import relativedelta
 
-
 router = APIRouter()
 
 
-@router.post("/register-project/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
-async def register_project(project: schema_user.RegisterProject, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
+@router.post("/register-project/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)],
+             status_code=status.HTTP_200_OK)
+async def register_project(project: schema_user.RegisterProject,
+                           current_user: User = Depends(auth.get_current_active_user),
+                           db: Session = Depends(db_session)):
     try:
         # Check if project already exists
         dt_project = service_user.find_project_exists(project=project.project, db=db)
@@ -83,20 +87,22 @@ async def project_details_v2(
     return dt_project
 
 
-@router.post('/subscription-details/', response_model=schema_project.SubscriptionDetailsOut, status_code=status.HTTP_200_OK)
+@router.post('/subscription-details/', response_model=schema_project.SubscriptionDetailsOut,
+             status_code=status.HTTP_200_OK)
 async def subscription_details(
         subscribe: schema_project.SubscriptionDetails,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
-    dt_subscription = service_project.subscription_details(user_id=current_user.id, subs_id=subscribe.subscription_id, db=db)
+    dt_subscription = service_project.subscription_details(user_id=current_user.id, subs_id=subscribe.subscription_id,
+                                                           db=db)
     return dt_subscription
 
 
 @router.post('/update-project', response_model=schema_project.Project, status_code=status.HTTP_200_OK)
 async def update_project(
-    project: schema_project.ProjectUpdateIn,
-    current_user: User = Depends(auth.get_current_active_user),
-    db: Session = Depends(db_session)):
+        project: schema_project.ProjectUpdateIn,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
     dt_project = service_project.find_project(project_id=project.project_id, db=db)
     if not dt_project:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data tidak valid")
@@ -111,7 +117,7 @@ async def update_project(
     db.commit()
     db.refresh(dt_project)
     return dt_project
-    
+
 
 @router.post("/subscribe-plan/", response_model=sch_subs.Subscription)
 async def subscribe_plan(
@@ -163,9 +169,71 @@ async def subscribe_plan(
         db.close()
 
 
-@router.post("/extend-subscription/")
+@router.post("/extend-subscription/", response_model=sch_subs.Subscription)
 async def extend_subscription(
         subs: sch_subs.SubscribePlan,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
+    try:
+        # Cek subscribe active
+        subs_active = serv_subs.subscribe_active(project_id=subs.project_id, db=db)
+        if not subs_active:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tidak ditemukan data project aktif")
+
+        # Cek subscribe pending
+        subs_pending = serv_subs.subscribe_pending(project_id=subs.project_id, db=db)
+        if subs_pending:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail="Anda masih mempunyai project dengan status pending")
+
+        # Cek plan yang minta available di dalam tabel subscribe_plan
+        subscription_plan = serv_subs.plan(subs_plan_id=subs.subs_plan_id, db=db)
+        if not subscription_plan:
+            raise HTTPException(
+                detail="Data subscription plan tidak valid",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Cek project
+        project = service_project.project_details(user_id=current_user.id, project_id=subs.project_id, db=db)
+        if not project:
+            raise HTTPException(
+                detail="Data project tidak valid",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        subs_price = subscription_plan.monthly_price * subs.subs_month
+        ppn = subs_price * 10 / 100
+        total_subs_price = subs_price + ppn
+
+        last_subs = subs_active[-1]
+        subs_start = last_subs.subs_end + relativedelta(days=1)
+        subs_end = subs_start + relativedelta(months=subs.subs_month)
+
+        dt_subs_extend = serv_subs.extend_plan(
+            subs_plan_id=subs.subs_plan_id,
+            subs_month=subs.subs_month,
+            subs_start=subs_start,
+            subs_end=subs_end,
+            subs_price=total_subs_price,
+            project_id=project.id,
+            creator=current_user.id,
+            db=db)
+
+        db.add(dt_subs_extend)
+        db.commit()
+        db.refresh(dt_subs_extend)
+
+        return dt_subs_extend
+    except Exception:
+        raise
+    finally:
+        db.close()
+
+
+@router.post("/upgrade-subscription/")
+async def upgrade_subscription(
+        subs: sch_subs.SubscribePlanUpgrade,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
     # Cek subscribe active
@@ -176,7 +244,8 @@ async def extend_subscription(
     # Cek subscribe pending
     subs_pending = serv_subs.subscribe_pending(project_id=subs.project_id, db=db)
     if subs_pending:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Anda masih mempunyai project dengan status pending")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Anda masih mempunyai project dengan status pending")
 
     # Cek plan yang minta available di dalam tabel subscribe_plan
     subscription_plan = serv_subs.plan(subs_plan_id=subs.subs_plan_id, db=db)
@@ -194,31 +263,27 @@ async def extend_subscription(
             status_code=status.HTTP_400_BAD_REQUEST
         )
 
-    subs_price = subscription_plan.monthly_price * subs.subs_month
+    subs_months = [subs_active[i].subs_month for i in range(len(subs_active))]
+    subs_month = sum(subs_months)
+
+    subs_price = subscription_plan.monthly_price * subs_month
     ppn = subs_price * 10 / 100
     total_subs_price = subs_price + ppn
 
-    dt_subs_extend = serv_subs.subscribe_plan(
+    dt_subs_upgrade = serv_subs.subscribe_plan(
         subs_plan_id=subs.subs_plan_id,
-        subs_month=subs.subs_month,
+        subs_month=subs_month,
         subs_price=total_subs_price,
         project_id=project.id,
         creator=current_user.id,
         db=db)
 
-    db.add(dt_subs_extend)
-    db.commit()
-    db.refresh(dt_subs_extend)
+    # db.add(dt_subs_upgrade)
+    # db.commit()
+    # db.refresh(dt_subs_upgrade)
 
-    return dt_subs_extend
-
-
-@router.put("/upgrade-subscription/")
-async def update_subscription():
-    return {}
-
+    return dt_subs_upgrade
 
 # @router.post("/billing-confirmation/")
 # async def billing_confirmation():
 #     return {}
-

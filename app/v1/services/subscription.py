@@ -46,3 +46,23 @@ def subscribe_plan(
         project_id=project_id,
         creator=creator)
     return dt_subscription_plan
+
+
+def extend_plan(
+        subs_plan_id: int,
+        subs_month: int,
+        subs_start: datetime.datetime,
+        subs_end: datetime.datetime,
+        subs_price: float,
+        project_id: int,
+        creator: int,
+        db: Session = Depends) -> object:
+    dt_subscription_plan = Subscription(
+        subs_plan_id=subs_plan_id,
+        subs_month=subs_month,
+        subs_start=subs_start,
+        subs_end=subs_end,
+        subs_price=subs_price,
+        project_id=project_id,
+        creator=creator)
+    return dt_subscription_plan
