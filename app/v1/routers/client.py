@@ -16,10 +16,7 @@ router = APIRouter()
 
 
 @router.post("/register-project/", response_model=schema_user.UserDetailOut, dependencies=[Depends(auth.default)], status_code=status.HTTP_200_OK)
-async def register_project(
-        project: schema_user.RegisterProject,
-        current_user: User = Depends(auth.get_current_active_user),
-        db: Session = Depends(db_session)):
+async def register_project(project: schema_user.RegisterProject, current_user: User = Depends(auth.get_current_active_user), db: Session = Depends(db_session)):
     try:
         # Check if project already exists
         dt_project = service_user.find_project_exists(project=project.project, db=db)
@@ -70,7 +67,7 @@ async def project_details(
         project: schema_project.ProjectDetail,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
-    dt_project = service_project.project_detail(user_id=current_user.id, project_id=project.project_id, db=db)
+    dt_project = service_project.project_details(user_id=current_user.id, project_id=project.project_id, db=db)
     return dt_project
 
 
@@ -92,6 +89,27 @@ async def subscription_details(
     return dt_subscription
 
 
+@router.post('/update-project', response_model=schema_project.Project, status_code=status.HTTP_200_OK)
+async def update_project(
+    project: schema_project.ProjectUpdateIn,
+    current_user: User = Depends(auth.get_current_active_user),
+    db: Session = Depends(db_session)):
+    dt_project = service_project.find_project(project_id=project.project_id, db=db)
+    if not dt_project:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data tidak valid")
+
+    dt_project.editor = current_user.id
+    update_data = project.dict(exclude_unset=True, exclude_none=True)
+    for key, value in update_data.items():
+        # Skip null or empty value
+        if value:
+            setattr(dt_project, key, value)
+    db.add(dt_project)
+    db.commit()
+    db.refresh(dt_project)
+    return dt_project
+    
+
 @router.post("/subscribe-plan/", response_model=sch_subs.Subscription)
 async def subscribe_plan(
         subs: sch_subs.SubscribePlan,
@@ -106,7 +124,7 @@ async def subscribe_plan(
                 status_code=status.HTTP_400_BAD_REQUEST
             )
 
-        project = service_project.project_detail(user_id=current_user.id, project_id=subs.project_id, db=db)
+        project = service_project.project_details(user_id=current_user.id, project_id=subs.project_id, db=db)
         if not project:
             raise HTTPException(
                 detail="Data project tidak valid",
@@ -124,15 +142,12 @@ async def subscribe_plan(
         subs_price = subscription_plan.monthly_price * subs.subs_month
         ppn = subs_price * 10 / 100
         total_subs_price = subs_price + ppn
-        subs_end = subs.subs_start + relativedelta(months=subs.subs_month)
         token = useful.random_string(16)
 
         dt_subscription_plan = serv_subs.subscribe_plan(
             subs_plan_id=subs.subs_plan_id,
             subs_month=subs.subs_month,
-            subs_start=subs.subs_start,
             subs_price=total_subs_price,
-            subs_end=subs_end,
             token=token,
             project_id=project.id,
             creator=current_user.id,
@@ -145,6 +160,16 @@ async def subscribe_plan(
         raise
     finally:
         db.close()
+
+
+@router.post("/extend-subscription/")
+async def extend_subscription():
+    return {}
+
+
+@router.put("/upgrade-subscription/")
+async def update_subscription():
+    return {}
 
 
 # @router.post("/billing-confirmation/")

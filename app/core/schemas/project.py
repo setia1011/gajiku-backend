@@ -63,6 +63,18 @@ class Project(BaseModel):
         orm_mode = True
 
 
+class ProjectUpdateIn(BaseModel):
+    project_id: int
+    project: Optional[str]
+    address: Optional[str]
+    responsible_name: Optional[str]
+    responsible_id_type: Optional[int]
+    responsible_id_number: Optional[str]
+    
+    class Config:
+        orm_mode = True
+
+
 class ProjectDetail(BaseModel):
     project_id: int
 

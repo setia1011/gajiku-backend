@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import db_session
@@ -8,6 +10,7 @@ from app.core.schemas import user as schema_user
 from app.v1.services import user as service_user
 from app.v1.services import administrator as service_administrator
 from app.core.schemas import administrator as schema_administrator
+from dateutil.relativedelta import relativedelta
 
 
 router = APIRouter()
@@ -74,9 +77,14 @@ async def activate_subscription(
                 detail="Data subscription tidak valid"
             )
 
+        subs_start = datetime.datetime.now()
+        subs_end = subs_start + relativedelta(months=dt_subs.subs_month)
+
         if dt_subs.status == 'pending':
             dt_subs.status = 'active'
             dt_subs.editor = current_user.id
+            dt_subs.subs_start = subs_start
+            dt_subs.subs_end = subs_end
             db.add(dt_subs)
             db.commit()
             db.refresh(dt_subs)

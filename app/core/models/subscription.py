@@ -11,12 +11,12 @@ class Subscription(Base):
     subs_plan_id = Column(Integer, ForeignKey('tbl_subscription_plan.id'), nullable=False, index=True)
     subs_month = Column(Integer, nullable=False, index=True)
     subs_price = Column(Float, nullable=False, index=True)
-    subs_start = Column(DateTime(timezone=True), server_default=func.now(), index=True)
-    subs_end = Column(DateTime(timezone=True), nullable=False, index=True)
+    subs_start = Column(DateTime(timezone=True), index=True)
+    subs_end = Column(DateTime(timezone=True), index=True)
 
     token = Column(String(255), unique=True, nullable=False)
     project_id = Column(Integer, ForeignKey("tbl_project.id"), nullable=False, index=True)
-    status = Column(Enum("pending","active","expired"), server_default="pending", nullable=False, index=True)
+    status = Column(Enum("pending","active","expired","canceled"), server_default="pending", nullable=False, index=True)
 
     creator = Column(Integer, nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)

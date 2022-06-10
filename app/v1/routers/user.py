@@ -162,6 +162,7 @@ async def update(
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Not authenticated")
         if not current_user:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Data tidak valid")
+            
         current_user.editor = current_user.id
         update_data = user.dict(exclude_unset=True)
         for key, value in update_data.items():

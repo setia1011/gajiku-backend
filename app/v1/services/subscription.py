@@ -23,18 +23,14 @@ def subscribe(project_id: int, db: Session = Depends):
 def subscribe_plan(
         subs_plan_id: int,
         subs_month: int,
-        subs_start: datetime.datetime,
-        subs_end: datetime.datetime,
         subs_price: float,
         token: str,
         project_id: int,
         creator: int,
-        db: Session = Depends):
+        db: Session = Depends) -> object:
     dt_subscription_plan = Subscription(
         subs_plan_id=subs_plan_id,
         subs_month=subs_month,
-        subs_start=subs_start,
-        subs_end=subs_end,
         subs_price=subs_price,
         token=token,
         project_id=project_id,

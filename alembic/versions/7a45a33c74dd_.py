@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 5bb9d5e30fc9
+Revision ID: 7a45a33c74dd
 Revises: 
-Create Date: 2022-04-26 10:29:33.596060
+Create Date: 2022-06-10 10:53:35.645388
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5bb9d5e30fc9'
+revision = '7a45a33c74dd'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -123,7 +123,7 @@ def upgrade():
     op.create_index(op.f('ix_tbl_project_user_id'), 'tbl_project', ['user_id'], unique=False)
     op.create_table('set_gaji_bpjs',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('kode', sa.String(length=50), nullable=False),
+    sa.Column('kelas', sa.String(length=50), nullable=False),
     sa.Column('besaran', sa.Float(), nullable=True),
     sa.Column('jenis_besaran', sa.Enum('persentase', 'spesifik'), nullable=False),
     sa.Column('dasar_penetapan', sa.String(length=500), nullable=True),
@@ -142,8 +142,8 @@ def upgrade():
     op.create_index(op.f('ix_set_gaji_bpjs_besaran'), 'set_gaji_bpjs', ['besaran'], unique=False)
     op.create_index(op.f('ix_set_gaji_bpjs_id'), 'set_gaji_bpjs', ['id'], unique=False)
     op.create_index(op.f('ix_set_gaji_bpjs_jenis_besaran'), 'set_gaji_bpjs', ['jenis_besaran'], unique=False)
+    op.create_index(op.f('ix_set_gaji_bpjs_kelas'), 'set_gaji_bpjs', ['kelas'], unique=False)
     op.create_index(op.f('ix_set_gaji_bpjs_keterangan'), 'set_gaji_bpjs', ['keterangan'], unique=False)
-    op.create_index(op.f('ix_set_gaji_bpjs_kode'), 'set_gaji_bpjs', ['kode'], unique=False)
     op.create_index(op.f('ix_set_gaji_bpjs_project_id'), 'set_gaji_bpjs', ['project_id'], unique=False)
     op.create_index(op.f('ix_set_gaji_bpjs_status'), 'set_gaji_bpjs', ['status'], unique=False)
     op.create_table('set_gaji_grade',
@@ -254,11 +254,11 @@ def upgrade():
     sa.Column('subs_plan_id', sa.Integer(), nullable=False),
     sa.Column('subs_month', sa.Integer(), nullable=False),
     sa.Column('subs_price', sa.Float(), nullable=False),
-    sa.Column('subs_start', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
-    sa.Column('subs_end', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('subs_start', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('subs_end', sa.DateTime(timezone=True), nullable=True),
     sa.Column('token', sa.String(length=255), nullable=False),
     sa.Column('project_id', sa.Integer(), nullable=False),
-    sa.Column('status', sa.Enum('pending', 'active', 'expired'), server_default='pending', nullable=False),
+    sa.Column('status', sa.Enum('pending', 'active', 'expired', 'canceled'), server_default='pending', nullable=False),
     sa.Column('creator', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('editor', sa.Integer(), nullable=True),
@@ -454,8 +454,8 @@ def downgrade():
     op.drop_table('set_gaji_grade')
     op.drop_index(op.f('ix_set_gaji_bpjs_status'), table_name='set_gaji_bpjs')
     op.drop_index(op.f('ix_set_gaji_bpjs_project_id'), table_name='set_gaji_bpjs')
-    op.drop_index(op.f('ix_set_gaji_bpjs_kode'), table_name='set_gaji_bpjs')
     op.drop_index(op.f('ix_set_gaji_bpjs_keterangan'), table_name='set_gaji_bpjs')
+    op.drop_index(op.f('ix_set_gaji_bpjs_kelas'), table_name='set_gaji_bpjs')
     op.drop_index(op.f('ix_set_gaji_bpjs_jenis_besaran'), table_name='set_gaji_bpjs')
     op.drop_index(op.f('ix_set_gaji_bpjs_id'), table_name='set_gaji_bpjs')
     op.drop_index(op.f('ix_set_gaji_bpjs_besaran'), table_name='set_gaji_bpjs')

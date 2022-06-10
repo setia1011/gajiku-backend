@@ -24,7 +24,6 @@ class Subscription(BaseModel):
 class SubscribePlan(BaseModel):
     subs_plan_id: int
     subs_month: int
-    subs_start: datetime.datetime
     project_id: int
 
     class Config:
@@ -33,7 +32,6 @@ class SubscribePlan(BaseModel):
             "example": {
                 "subs_plan_id": 2,
                 "subs_month": 3,
-                "subs_start": "2019-08-24T14:15:22Z",
                 "project_id": 1
             }
         }
