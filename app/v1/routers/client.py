@@ -87,6 +87,32 @@ async def project_details_v2(
     return dt_project
 
 
+@router.post('/project-details-v3/', status_code=status.HTTP_200_OK)
+async def project_details_v3(
+        project: schema_project.ProjectDetail,
+        current_user: User = Depends(auth.get_current_active_user),
+        db: Session = Depends(db_session)):
+    dt_project = service_project.project_details_v2(user_id=current_user.id, project_id=project.project_id, db=db)
+    dx = dt_project.ref_subscription
+
+    lendx = len(dx)
+    du = {}
+    subs_month = 0
+    for i in range(lendx):
+        du['plan_id'] = dx[i].subs_plan_id
+        du['plan'] = dx[i].ref_subscription_plan.plan
+        subs_month += dx[i].subs_month
+        du['status'] = dx[i].status
+        if i == 0:
+            du['subs_start'] = dx[i].subs_start
+        if i == lendx - 1:
+            du['subs_end'] = dx[i].subs_end
+    du['subs_month'] = subs_month
+    dt_project.ref_subscription.subs_month = 0
+
+    return dt_project
+
+
 @router.post('/subscription-details/', response_model=schema_project.SubscriptionDetailsOut,
              status_code=status.HTTP_200_OK)
 async def subscription_details(
@@ -231,7 +257,7 @@ async def extend_subscription(
         db.close()
 
 
-@router.post("/upgrade-subscription/")
+@router.post("/upgrade-subscription/", include_in_schema=False)
 async def upgrade_subscription(
         subs: sch_subs.SubscribePlanUpgrade,
         current_user: User = Depends(auth.get_current_active_user),
@@ -263,12 +289,13 @@ async def upgrade_subscription(
             status_code=status.HTTP_400_BAD_REQUEST
         )
 
-    subs_months = [subs_active[i].subs_month for i in range(len(subs_active))]
-    subs_month = sum(subs_months)
+    subs_month = sum([subs_active[i].subs_month for i in range(len(subs_active))])
 
     subs_price = subscription_plan.monthly_price * subs_month
     ppn = subs_price * 10 / 100
     total_subs_price = subs_price + ppn
+
+    total_price = sum([subs_active[i].subs_price for i in range(len(subs_active))])
 
     dt_subs_upgrade = serv_subs.subscribe_plan(
         subs_plan_id=subs.subs_plan_id,
@@ -282,7 +309,7 @@ async def upgrade_subscription(
     # db.commit()
     # db.refresh(dt_subs_upgrade)
 
-    return dt_subs_upgrade
+    return total_price
 
 # @router.post("/billing-confirmation/")
 # async def billing_confirmation():

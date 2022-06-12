@@ -34,7 +34,6 @@ class Subscription(BaseModel):
     subs_price: Optional[float]
     subs_start: Optional[datetime.datetime]
     subs_end: Optional[datetime.datetime]
-    token: Optional[str]
     project_id: Optional[int]
     status: Optional[str]
     creator: Optional[int]
@@ -49,6 +48,7 @@ class Subscription(BaseModel):
 class Project(BaseModel):
     id: Optional[int]
     project: Optional[str]
+    token: Optional[str]
     address: Optional[str]
     responsible_name: Optional[str]
     responsible_id_type: Optional[int]
