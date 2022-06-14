@@ -102,6 +102,27 @@ class ProjectDetailsOutV2(Project):
         orm_mode = True
 
 
+class RefSubscriptionExt(BaseModel):
+    plan_id: int
+    plan: str
+    subs_start: datetime.datetime
+    subs_end: datetime.datetime
+    status: str
+    subs_month: int
+
+    class Config:
+        orm_mode: True
+
+
+class ProjectDetailsOutV3(Project):
+    ref_id_type: Optional[UserIdType]
+    ref_subscription: Optional[list[RefSubscriptionPlan]]
+    ref_subscription_ext: Optional[RefSubscriptionExt]
+
+    class Config:
+        orm_mode = True
+
+
 class SubscriptionDetailsOut(Subscription):
     ref_project: Optional[Project]
     ref_subscription_plan: Optional[SubscriptionPlan]

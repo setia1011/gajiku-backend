@@ -87,7 +87,7 @@ async def project_details_v2(
     return dt_project
 
 
-@router.post('/project-details-v3/', status_code=status.HTTP_200_OK)
+@router.post('/project-details-v3/', response_model=schema_project.ProjectDetailsOutV3, status_code=status.HTTP_200_OK)
 async def project_details_v3(
         project: schema_project.ProjectDetail,
         current_user: User = Depends(auth.get_current_active_user),
@@ -108,7 +108,9 @@ async def project_details_v3(
         if i == lendx - 1:
             du['subs_end'] = dx[i].subs_end
     du['subs_month'] = subs_month
-    dt_project.ref_subscription.subs_month = 0
+
+    # data = {"detail": dt_project, "ref_subscription_calc": du}
+    dt_project.ref_subscription_ext = du
 
     return dt_project
 
