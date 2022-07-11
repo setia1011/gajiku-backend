@@ -1,4 +1,5 @@
 import datetime
+from importlib.util import LazyLoader
 from fastapi import Depends
 from sqlalchemy.orm import Session, selectinload, subqueryload
 from app.core.models import User, Activation, Project, Subscription
@@ -20,12 +21,17 @@ def project_details(user_id: int, project_id: int, db: Session = Depends):
 
 
 def project_details_v2(user_id: int, project_id: int, db: Session = Depends):
-    dt_project = db.query(Project).filter(Project.id == project_id).filter(Project.user_id == user_id) \
-        .options(selectinload(Project.ref_subscription), selectinload(Project.ref_id_type)).options().first()
+    # dt_project = db.query(Project).filter(Project.id == project_id).filter(Project.user_id == user_id) \
+    #     .options(selectinload(Project.ref_subscription), selectinload(Project.ref_id_type)).options().first()
 
-    dt_project_v2 = db.query(Project).filter(Project.id == project_id).filter(Project.user_id == user_id) \
-        .options(selectinload(Project.ref_subscription), selectinload(Project.ref_id_type),
-                 subqueryload(Project.ref_subscription).subqueryload(Subscription.ref_subscription_plan)).first()
+    dt_project_v2 = db.query(Project).\
+        filter(Project.id == project_id).\
+            filter(Project.user_id == user_id).options(
+            selectinload(Project.ref_subscription), 
+            selectinload(Project.ref_id_type),
+            subqueryload(Project.ref_subscription).\
+                subqueryload(Subscription.ref_subscription_plan)).all()
+
     return dt_project_v2
 
 

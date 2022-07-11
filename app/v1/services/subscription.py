@@ -26,6 +26,12 @@ def subscribe_active(project_id: int, db: Session = Depends):
     return dt_subscribe
 
 
+def subscribe_active_v2(project_id: int, subs_plan_id: int, db: Session = Depends):
+    dt_subscribe = db.query(Subscription).filter(Subscription.project_id == project_id).filter(Subscription.subs_plan_id == subs_plan_id).filter(
+        Subscription.status == "active").all()
+    return dt_subscribe
+
+
 def subscribe_pending(project_id: int, db: Session = Depends):
     dt_subscribe = db.query(Subscription).filter(Subscription.project_id == project_id).filter(
         Subscription.status == "pending").all()

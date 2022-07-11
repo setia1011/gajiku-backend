@@ -87,30 +87,32 @@ async def project_details_v2(
     return dt_project
 
 
-@router.post('/project-details-v3/', response_model=schema_project.ProjectDetailsOutV3, status_code=status.HTTP_200_OK)
+@router.post('/project-details-v3/', status_code=status.HTTP_200_OK)
 async def project_details_v3(
         project: schema_project.ProjectDetail,
         current_user: User = Depends(auth.get_current_active_user),
         db: Session = Depends(db_session)):
     dt_project = service_project.project_details_v2(user_id=current_user.id, project_id=project.project_id, db=db)
-    dx = dt_project.ref_subscription
+    # dx = dt_project.ref_subscription
 
-    lendx = len(dx)
-    du = {}
-    subs_month = 0
-    for i in range(lendx):
-        du['plan_id'] = dx[i].subs_plan_id
-        du['plan'] = dx[i].ref_subscription_plan.plan
-        subs_month += dx[i].subs_month
-        du['status'] = dx[i].status
-        if i == 0:
-            du['subs_start'] = dx[i].subs_start
-        if i == lendx - 1:
-            du['subs_end'] = dx[i].subs_end
-    du['subs_month'] = subs_month
-
-    # data = {"detail": dt_project, "ref_subscription_calc": du}
-    dt_project.ref_subscription_ext = du
+    # lendx = len(dx)
+    # du = {}
+    # subs_month = 0
+    # for i in range(lendx):
+    #     print(dx[i].id)
+    #     du['plan_id'] = dx[i].subs_plan_id
+    #     du['plan'] = dx[i].ref_subscription_plan.plan
+    #     subs_month += dx[i].subs_month
+    #     du['status'] = dx[i].status
+    #     if i == 0:
+    #         du['subs_start'] = dx[i].subs_start
+    #     if i == lendx - 1:
+    #         du['subs_end'] = dx[i].subs_end
+    # du['subs_month'] = subs_month
+    #
+    # # data = {"detail": dt_project, "ref_subscription_calc": du}
+    # dt_project.ref_subscription = []
+    # dt_project.ref_subscription_ext = du
 
     return dt_project
 
@@ -204,9 +206,9 @@ async def extend_subscription(
         db: Session = Depends(db_session)):
     try:
         # Cek subscribe active
-        subs_active = serv_subs.subscribe_active(project_id=subs.project_id, db=db)
+        subs_active = serv_subs.subscribe_active_v2(project_id=subs.project_id, subs_plan_id=subs.subs_plan_id, db=db)
         if not subs_active:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tidak ditemukan data project aktif")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tidak ditemukan data subscription aktif")
 
         # Cek subscribe pending
         subs_pending = serv_subs.subscribe_pending(project_id=subs.project_id, db=db)
